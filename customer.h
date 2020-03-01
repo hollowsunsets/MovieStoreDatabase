@@ -1,3 +1,5 @@
+
+
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
@@ -13,6 +15,9 @@ class Customer {
   Customer(int id, const string &first_name, const string &last_name);
 
   void record_transaction(Transaction t);
+  bool borrow_item(Item* item);
+  bool return_item(Item* item)
+  void display_history() const;
   
  private:
   int id;
