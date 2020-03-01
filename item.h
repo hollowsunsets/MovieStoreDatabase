@@ -31,17 +31,14 @@ class Item {
   virtual bool operator>(const Item&) = 0;
   virtual bool operator==(const Item&) = 0;
   
- private:
+ protected:
   // amount of the item in stock
-  int stock;
-  // item group code, defined by classes of rentable items
-  // e.g. DVD?, VCR Player 
-  // may be unused
-  const char groupcode;
+  int stock = 0;
+
   // item subgroup type
   // e.g. movie genre, device manufacturer
   // must be in [A..~] (ASCII 65-126)
-  const char typecode;
+  const static char typecode;
 
   // derived classes have additional data fields
 };
