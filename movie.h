@@ -9,13 +9,12 @@
 // with required fields but no groupcode
 class Movie : protected Item {
  public:
-
   Movie(int stock, const std::string &director,
         int year, const std::string &title);
 
-  virtual bool operator<(const Item&);
-  virtual bool operator>(const Item&);
-  virtual bool operator==(const Item&);
+  virtual bool operator<(const Item &m) const;
+  virtual bool operator>(const Item &m) const;
+  virtual bool operator==(const Item &m) const;
 
  protected:
   std::string director;
@@ -65,6 +64,5 @@ class ClassicMovie : protected Movie {
   std::string major_actor;
   int month;
 };
-
 
 #endif // MOVIE_H
