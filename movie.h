@@ -1,7 +1,6 @@
 #ifndef MOVIE_H
 #define MOVIE_H
 
-#include <string>
 #include "item.h"
 
 // Movies are a type of Item carried by a Store
@@ -9,6 +8,10 @@
 // with required fields but no groupcode
 class Movie : protected Item {
  public:
+  // constructor using input line format
+  Movie(const std::string& s);
+
+  // constructor using explicit parameters
   Movie(int stock, const std::string &director,
         int year, const std::string &title);
 
@@ -49,6 +52,10 @@ class DramaMovie : protected Movie {
 // has additional fields
 class ClassicMovie : protected Movie {
  public:
+  // constructor using input line format
+  ClassicMovie(const std::string& s);
+
+  // constructor using explicit parameters
   ClassicMovie(int stock, const std::string &director,
                const std::string &title, const std::string &major_actor,
                int month, int year);

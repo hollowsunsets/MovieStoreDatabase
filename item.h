@@ -1,13 +1,16 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <string>
+
 // abstract Item class
 // represents products that might be carried by a Store inventory
 // and can be sorted into an inventory
 // see also ItemFactory
 class Item {
  public:
-  Item();
+  // constructor using input line format
+  Item(const std::string& s);
   
   char get_typecode() const;
 
