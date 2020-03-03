@@ -33,7 +33,7 @@ public:
     void display_history();
 private:
     CustomerTable customer_table;
-    std::map<std::string, Item*> inventory;
+    std::map<std::string, Item*>[] inventory;
 };
 
 #endif // STORE_H
