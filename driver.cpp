@@ -1,6 +1,26 @@
-#include <assert>
+#include <cassert>
+#include <iostream>
+#include <sstream>
 #include "store.h"
 
-int main() {
+using namespace std;
 
+bool test_customer() {
+  bool success = true;
+  Customer c = Customer(1001, "Reimu", "Hakurei");
+  ostringstream s;
+  s << c;
+  cout << c;
+  success &= s.str() == "Customer 1001, Reimu Hakurei history:\n";
+
+  // requires Transaction class
+  //c.record_transaction(Transaction());
+  return success;
+}
+
+int main() {
+  bool t;
+  cout << boolalpha;
+  t = test_customer();
+  cout << "Customer tests pass: " << t << std::endl;
 }

@@ -1,11 +1,14 @@
+#ifndef STORE_H
+#define STORE_H
+
 #include "customertable.h"
 #include "item.h"
 #include <map>
 #include <iostream>
 #include <string>
 
-#ifndef STORE_H
-#define
+using namespace std;
+
 class Store {
 public:
     Store();
@@ -32,8 +35,8 @@ public:
     // Prints the transaction history of all Customers of the Store
     void display_history();
 private:
-    CustomerTable customer_table;
-    std::map<std::string, Item*>[] inventory;
+  std::map<std::string, Item*> inventory[127-65];
+  CustomerTable customer_table;
 };
 
 #endif // STORE_H

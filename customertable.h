@@ -30,7 +30,7 @@ class CustomerTable {
 
  private:
   const static int INITIAL_SIZE = 256;
-  Customer * customers[];
+  Customer * customers[INITIAL_SIZE];
 };
 
 #endif // CUSTOMERTABLE_H
