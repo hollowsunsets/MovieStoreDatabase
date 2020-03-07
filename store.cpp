@@ -25,6 +25,7 @@ bool Store::read_customers(const std::string& filename) {
         return false;
     }
     std::string line;
+    // Only print for now because no CustomerTable implementation yet
     while (std::getline(infile, line)) {
         std::cout << line << std::endl;
     }

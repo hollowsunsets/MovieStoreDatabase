@@ -17,7 +17,7 @@ class Transaction {
   char transaction_type;
 
   // id of target customer, if present, or 0 
-  unsigned short customer_id = 0;
+  unsigned short customer_id;
 
   // for transactions with item data, the item group code
   // e.g. DVD, CD, VCR Player, ...
@@ -33,6 +33,15 @@ class Transaction {
   // to be handled by appropriate Item subclass
   // on construction
   std::string item_data;
+
+  // Constructor
+  Transaction(char trans_type, unsigned short id, char item_type, char typecode, std::string data) {
+    this->transaction_type = trans_type;
+    this->customer_id = id;
+    this->item_type = item_type;
+    this->item_typecode = typecode;
+    this->item_data = data;
+  }
 };
 
 #endif // TRANSACTION_H

@@ -8,6 +8,7 @@
 #include <string>
 
 class Store {
+    static const int INVENTORY_SIZE = '~' - 'a';
 public:
     Store();
     ~Store();
@@ -33,7 +34,7 @@ public:
     // Prints the transaction history of all Customers of the Store
     void display_history();
 private:
-  std::map<std::string, Item*> inventory[127 - 65];
+  std::map<std::string, Item*> inventory[INVENTORY_SIZE];
   CustomerTable customer_table;
 };
 
