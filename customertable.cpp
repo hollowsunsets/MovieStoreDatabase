@@ -4,7 +4,7 @@ CustomerTable::CustomerTable() {
 
 }
 
-~CustomerTable::CustomerTable() {
+CustomerTable::~CustomerTable() {
 
 }
 
@@ -27,6 +27,6 @@ void CustomerTable::display_table() const {
 
 }
 
-void CustomerTable::hash(int id) const {
+int CustomerTable::hash(int id) const {
 
 }
