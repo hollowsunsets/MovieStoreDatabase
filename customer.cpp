@@ -34,6 +34,12 @@ void Customer::record_transaction(const Transaction& t) {
   transaction_history.push_back(t);
 }
 
+// get customer's id
+// preconditions: none
+// postconditions: none
+int Customer::get_id() const {
+  return id;
+}
 
 // display customer's history directly to stdout
 // should this just be the history, and skip header,

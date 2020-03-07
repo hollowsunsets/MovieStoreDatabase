@@ -14,6 +14,7 @@ class Customer {
   Customer(int id, const std::string first_name, const std::string last_name);
 
   void record_transaction(const Transaction& t);
+  int get_id() const;
   void display_history() const;
   
  private:
