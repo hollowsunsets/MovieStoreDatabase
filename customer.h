@@ -1,3 +1,13 @@
+// --------------------------- Customer.h ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 24, 2020
+// Date of Last Modification:
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Declaring the functions of the Customer class.
+// ----------------------------------------------------------------------------
+
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
@@ -9,7 +19,7 @@
 
 class Customer {
  public:
-  friend std::ostream& operator<<(std::ostream& out, Customer c);
+  friend std::ostream& operator<<(std::ostream& out, const Customer& c);
   
   Customer(int id, const std::string first_name, const std::string last_name);
   Customer(const Customer& c);

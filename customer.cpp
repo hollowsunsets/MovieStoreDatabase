@@ -1,21 +1,41 @@
-// Customer Class
-// 2020-03-04
+// --------------------------- Customer.cpp ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 24, 2020
+// Date of Last Modification:
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the Customer class.
+// ----------------------------------------------------------------------------
+
 #include "customer.h"
 #include <stdexcept>
+#include <sstream>
+#include <iostream>
 
-// output operator overload
-// writes header specifying customer, then history of transactions
-// Customer 1001, Reimu Hakurei history:
-//  B 1001 D F Happily Never After, 2001
-std::ostream& operator<<(std::ostream& out, Customer c) {
-  out << "Customer " << c.id << ", " << c.first_name;
-  out << " " << c.last_name << " history:" << std::endl;
-  
+/* operator<<: Prints a string representation of this Customer.
+ *             Customer 1001, Reimu Hakurei
+ *             1001 history: [
+ *                  B 1001 D F Happily Never After, 2001
+ *             ]
+ * Preconditions: N/A
+ * Postconditions: N/A
+ */
+std::ostream& operator<<(std::ostream& out, const Customer& c) {
+  out << "Customer " << c.id << ", " << c.first_name << " " << c.last_name;
+
+  std::stringstream history;
+  std::streambuf* old_buffer = std::cout.rdbuf(history.rdbuf());
+  c.display_history();
+  std::cout.rdbuf(old_buffer);
+  out << history.str();
   return out;
 }
 
-// explicit fields constructor
-// preconditions: 0000 < id < 9999
+/* Constructor
+ * Preconditions: 0000 < id < 9999
+ * Postconditions: N/A
+ */
 Customer::Customer(int id,
                    const std::string first_name, const std::string last_name) {
   if (id < 0 || id > 9999) {
@@ -27,7 +47,7 @@ Customer::Customer(int id,
 }
 
 /* Copy constructor 
- * Preconditions: N/A
+ * Preconditions: 0000 < c.id < 9999
  * Postconditions: N/A
  */ 
 Customer::Customer(const Customer &c) {
@@ -36,9 +56,11 @@ Customer::Customer(const Customer &c) {
   this->last_name = c.last_name;
 }
 
-// add a transaction to the customer's transaction history
-// preconditions: T should have the same customer ID
-// postconditions: t present at end of customer's history
+
+/* record_transaction: Add a transaction to the customer's transaction history
+ * Preconditions: The given Transaction must have the same ID as this Customer.
+ * Postconditions: Transaction history should print in reverse chronological order.
+ */
 bool Customer::record_transaction(const Transaction& t) {
   if (t.customer_id != this->id) {
     return false;
@@ -47,10 +69,17 @@ bool Customer::record_transaction(const Transaction& t) {
   return true;
 }
 
-
-// display customer's history directly to stdout
+/* display_history: Prints the Customer's history in reverse chronological order.
+ * Preconditions: N/A
+ * Postconditions: N/A
+ */
 void Customer::display_history() const {
-  std::deque<int>::iterator it;
+  std::deque<Transaction>::const_iterator it = transaction_history.begin();
+  std::cout << " history: [";
 
+  if (it != transaction_history.end()) std::cout << " " << *it++ << " ";
+  while (it != transaction_history.end())
+      std::cout << "| " << *it++ << " ";
+  std::cout << "]"  << std::endl;
 }
 
