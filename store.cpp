@@ -1,22 +1,38 @@
 #include "store.h"
+#include "customer.h"
+#include "customertable.h"
+
+#include <string>
+#include <fstream>
+#include <iostream>
 
 Store::Store() {
 
 }
 
-~Store::Store() {
+Store::~Store() {
 
 }
 
-bool Store::read_inventory(std::ifstream &) {
+bool Store::read_inventory(const std::string& filename) {
 
 }
 
-bool Store::read_customer(std::ifstream &) {
-
+bool Store::read_customers(const std::string& filename) {
+    std::ifstream infile(filename.c_str());
+    if (!infile) {
+        std::cout << "File " << filename << " could not be opened." << std::endl;
+        return false;
+    }
+    std::string line;
+    // Only print for now because no CustomerTable implementation yet
+    while (std::getline(infile, line)) {
+        std::cout << line << std::endl;
+    }
+    return true;
 }
 
-bool Store::read_inventory(std::ifstream &) {
+bool Store::read_commands(const std::string& filename) {
 
 }
 
@@ -32,11 +48,11 @@ bool Store::execute_transaction(Transaction &) {
 
 }
 
-bool Store::borrow_item(const string &) {
+bool Store::borrow_item(const std::string &) {
 
 }
 
-bool Store::return_item(const string &) {
+bool Store::return_item(const std::string &) {
 
 }
 

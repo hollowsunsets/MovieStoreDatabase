@@ -36,7 +36,7 @@ class Item {
   
  protected:
   // amount of the item in stock
-  int stock = 0;
+  int stock;
 
   // item subgroup type
   // e.g. movie genre, device manufacturer
