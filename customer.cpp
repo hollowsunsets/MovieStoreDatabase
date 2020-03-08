@@ -14,25 +14,25 @@
 #include <iostream>
 
 /* operator<<: Prints a string representation of this Customer.
- *             Customer 1001, Reimu Hakurei
- *             1001 history: [
- *                  B 1001 D F Happily Never After, 2001
- *             ]
+ *             Customer 1001, Reimu Hakurei history: [ B 1001 D F Happily Never After, 2001 ]
  * Preconditions: N/A
  * Postconditions: N/A
  */
 std::ostream& operator<<(std::ostream& out, const Customer& c) {
   out << "Customer " << c.id << ", " << c.first_name << " " << c.last_name;
 
+  // Redirect standard output to stringstream
   std::stringstream history;
   std::streambuf* old_buffer = std::cout.rdbuf(history.rdbuf());
   c.display_history();
+
+  // Reset standard output to previous buffer
   std::cout.rdbuf(old_buffer);
   out << history.str();
   return out;
 }
 
-/* Constructor
+/* Constructor for Customer.
  * Preconditions: 0000 < id < 9999
  * Postconditions: N/A
  */

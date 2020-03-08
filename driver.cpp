@@ -63,4 +63,5 @@ void test_store() {
 
 int main() {
     test_customer();
+    test_store();
 }
