@@ -20,15 +20,7 @@
  */
 std::ostream& operator<<(std::ostream& out, const Customer& c) {
   out << "Customer " << c.id << ", " << c.first_name << " " << c.last_name;
-
-  // Redirect standard output to stringstream
-  std::stringstream history;
-  std::streambuf* old_buffer = std::cout.rdbuf(history.rdbuf());
-  c.display_history();
-
-  // Reset standard output to previous buffer
-  std::cout.rdbuf(old_buffer);
-  out << history.str();
+  c.display_history(out);
   return out;
 }
 
@@ -73,13 +65,15 @@ bool Customer::record_transaction(const Transaction& t) {
  * Preconditions: N/A
  * Postconditions: N/A
  */
-void Customer::display_history() const {
+void Customer::display_history(std::ostream& out) const {
   std::deque<Transaction>::const_iterator it = transaction_history.begin();
-  std::cout << " history: [";
-
-  if (it != transaction_history.end()) std::cout << " " << *it++ << " ";
-  while (it != transaction_history.end())
-      std::cout << "| " << *it++ << " ";
-  std::cout << "]"  << std::endl;
+  out << " history: [";
+  if (it != transaction_history.end()) {
+      out << " " << *it++ << " ";
+  }
+  while (it != transaction_history.end()) {
+      out << "| " << *it++ << " ";
+  }
+  out << "]"  << std::endl;
 }
 

@@ -24,7 +24,7 @@ class Customer {
   Customer(int id, const std::string first_name, const std::string last_name);
   Customer(const Customer& c);
   bool record_transaction(const Transaction& t);
-  void display_history() const;
+  void display_history(std::ostream& out = std::cout) const;
   
  private:
   int id;
