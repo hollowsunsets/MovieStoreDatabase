@@ -23,7 +23,7 @@ bool test_store() {
   cout << "Testing Store class..." << endl;
   
   Store s;
-  cout << "Testing Store.read_customers()..." << endl;
+  cout << "\tTesting Store.read_customers()..." << endl;
   assert(s.read_customers("data/data4customers.txt"));
   return true;
 }

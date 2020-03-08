@@ -1,3 +1,13 @@
+// --------------------------- CustomerTable.cpp ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification: 
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the CustomerTable class
+// ----------------------------------------------------------------------------
+
 #include "customertable.h"
 
 CustomerTable::CustomerTable() {
@@ -9,27 +19,35 @@ CustomerTable::~CustomerTable() {
   delete[] customers;
 }
 
+// Quadratic probing, where h(k, i) = (h'(k) + c_1 * i + c_2 * i^2)
 void CustomerTable::insert(const Customer &c) {
   // TODO: need some way to do table resize
   // which i totally forgot about; might need fullness member too
-  
-  int idx = hash(c.get_id());
-  // quadratic probing
-  int m = 0;
-  while (customers[(idx + m) % size] != NULL) {
-    if (m) m *= 2; else m = 1;
+  load_factor = ++elements / size;
+  if (load_factor > 0.5) {
+      // Resize the hash table
   }
-  customers[(idx + m) % size] = new Customer(c);
+  int index = hash(c.get_id());
+  // quadratic probing
+  int jumps = 0, m = 0;
+  while (customers[(index + jumps + (jumps * jumps)) % size] != NULL) {
+      ++jumps;
+      m = jumps * jumps;
+  }
+  customers[(index + m) % size] = new Customer(c);
+  load_factor = (++elements / size);
 }
 
+
 void CustomerTable::remove(int id) {
-  int idx = hash(id);
+  int index = hash(id);
   // quadratic probing again; note searching for a match instead of empty
-  int m = 0;
-  while (customers[(idx + m) % size]->get_id() != id) {
-    if (m) m *= 2; else m = 1;
+  int jumps = 0, m = 0;
+  while (customers[(index + m) % size]->get_id() != id) {
+    ++jumps;
+    m = jumps * jumps;
   }
-  customers[(idx + m) % size] = NULL;
+  customers[(index + m) % size] = NULL;
 }
 
 void CustomerTable::record_transaction(int id, const Transaction &transaction) {
@@ -39,9 +57,14 @@ void CustomerTable::record_transaction(int id, const Transaction &transaction) {
 
 // should this be returning a pointer?
 // if add transaction uses it, can't be const, at least
-const Customer& CustomerTable::retrieve(int id) const {
+Customer& CustomerTable::retrieve(int id) const {
   // search for id, and return it
+  
 }
+Customer& CustomerTable::operator[](int id) {
+  
+}
+
 
 void CustomerTable::display_table() const {
   // just loop through and print indexes + value
@@ -65,4 +88,8 @@ int CustomerTable::hash(int id) const {
 
   // combine to get 16 bits, then modulo size  
   return ((hash_hi << 8) | hash_lo) % size;
+}
+
+void CustomerTable::resize(int capacity) {
+    
 }

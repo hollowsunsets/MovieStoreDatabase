@@ -1,5 +1,14 @@
-// Customer Class
-// 2020-03-04
+// --------------------------- Customer.cpp ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification: 
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the Customer class
+// ----------------------------------------------------------------------------
+
+
 #include "customer.h"
 
 // output operator overload
@@ -26,6 +35,18 @@ Customer::Customer(int id,
   this->first_name = first_name;
   this->last_name = last_name;
 }
+
+
+/* Copy constructor for Customer
+ * Preconditions: 0000 < id < 9999
+ * Postconditions: N/A
+*/
+Customer::Customer(const Customer& c) {
+  this->id = c.id;
+  this->first_name = c.first_name;
+  this->last_name = c.last_name;
+}
+
 
 // add a transaction to the customer's transaction history
 // preconditions: none
