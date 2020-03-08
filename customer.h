@@ -12,8 +12,8 @@ class Customer {
   friend std::ostream& operator<<(std::ostream& out, Customer c);
   
   Customer(int id, const std::string first_name, const std::string last_name);
-
-  void record_transaction(const Transaction& t);
+  Customer(const Customer& c);
+  bool record_transaction(const Transaction& t);
   void display_history() const;
   
  private:
