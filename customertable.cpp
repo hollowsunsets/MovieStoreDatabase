@@ -26,8 +26,16 @@ CustomerTable::~CustomerTable() {
     delete[] customer_table;
 }
 
+void CustomerTable::insert(const Customer& c) {
+    this->insert_to_table(c, this->customer_table);
+}
+
+// Private helper method
+// Doing this so we don't have to redefine insert in resize.
+// Maybe better way to do this? Tried defining customer_table as default paramater
+// in insert() but you cannot pass non static class members as parameters
 // Quadratic probing, where h(k, i) = (h'(k) + c_1 * i + c_2 * i^2)
-void CustomerTable::insert(const Customer &c, Customer** customers) {
+void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
     load_factor = ++elements / size;
     if (load_factor > 0.5) {
         resize();
@@ -43,7 +51,6 @@ void CustomerTable::insert(const Customer &c, Customer** customers) {
     customers[(index + m) % size] = new Customer(c);
     load_factor = (++elements / size);
 }
-
 
 void CustomerTable::remove(int id) {
     int index = hash(id);
@@ -111,7 +118,7 @@ void CustomerTable::resize() {
     this->elements = 0;
     for (int i = 0; i < size; i++) {
         if (customer_table[i] != NULL) {
-            this->insert(customer_table[i], new_customer_table);
+            this->insert_to_table(*customer_table[i], new_customer_table);
             // TODO: Not sure if this even works
             delete customer_table[i];
         }

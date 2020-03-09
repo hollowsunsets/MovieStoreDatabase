@@ -13,7 +13,7 @@ public:
     // add a new customer record to the table
     // TODO: How to use customer_table as default parameter here?
     // void insert(const Customer& c, Customer** customers
-    void insert(const Customer &c, Customer** customers);
+    void insert(const Customer &c);
     // remove a customer from the table
     void remove(int id);
     // record a customer's Transaction, by customer id
@@ -57,6 +57,7 @@ private:
     int load_factor;
     Customer** customer_table;
     void resize();
+    void insert_to_table(const Customer& c, Customer** customers);
 
 };
 
