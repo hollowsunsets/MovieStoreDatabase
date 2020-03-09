@@ -44,11 +44,15 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
     int index = hash(c.get_id());
     // quadratic probing
     int jumps = 0, m = 0;
-    while (customers[(index + m) % size] != NULL) {
+    while (customers[(index + m) % size] != NULL &&
+           customers[(index + m) % size]->get_id() != c.get_id()) {
         ++jumps;
         m = jumps * jumps;
     }
     customers[(index + m) % size] = new Customer(c);
+    std::cout << customers[(index + m) % size] << std::endl;
+    std::cout << *customers[(index + m) % size] << std::endl;
+
     load_factor = (++elements / size);
 }
 
@@ -90,7 +94,21 @@ Customer* CustomerTable::retrieve(int id) const {
 }
 
 void CustomerTable::display_table() const {
-    // just loop through and print indexes + value
+    std::cout << "{ " << 0 << " : ";
+    if (customer_table[0]) {
+        std::cout << "\"" << *customer_table[0] << "\"";
+    } else {
+        std::cout << "\"" << 0 << "\"";
+    }
+    for (int i = 1; i < size; i++) {
+        std::cout << ", " << i << " : ";
+        if (customer_table[i]) {
+            std::cout << "\"" << *customer_table[i] << "\"";
+        } else {
+            std::cout << "\"" << 0 << "\"";
+        }
+    }
+    std::cout << "}" << std::endl;
 }
 
 // Pearson hashing modified to yield up to 16 bits

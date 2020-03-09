@@ -59,9 +59,22 @@ void test_store() {
     Store s;
     cout << "Testing Store.read_customers()..." << endl;
     assert(s.read_customers("data/data4customers.txt"));
+    cout << "Store tests pass!" << endl;
+}
+
+void test_customer_table() {
+    cout << "Testing Customer Table class..." << endl;
+    CustomerTable ct;
+    Customer c(1001, "Reimu", "Hakurei");
+    ct.insert(c);
+    ct.insert(c);
+    ct.insert(c);
+    ct.display_table();
+    cout << "Customer tests pass!" << endl;
 }
 
 int main() {
     test_customer();
     test_store();
+    test_customer_table();
 }
