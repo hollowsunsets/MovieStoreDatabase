@@ -67,8 +67,6 @@ void test_customer_table() {
     CustomerTable ct;
     Customer c(1001, "Reimu", "Hakurei");
     ct.insert(c);
-    ct.insert(c);
-    ct.insert(c);
     ct.display_table();
     cout << "Customer tests pass!" << endl;
 }

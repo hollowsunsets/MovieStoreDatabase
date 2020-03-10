@@ -15,19 +15,25 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 Store::Store() {
-
+    customer_table = CustomerTable();
 }
 
 Store::~Store() {
-
 }
 
 bool Store::read_inventory(const std::string& filename) {
 
 }
 
+/* read_customers: Builds a CustomerTable from the contents of
+ *                 the given text file.
+ *                 Ex: 1111 Mickey Mouse
+ * Preconditions: The given filename corresponds to a file.
+ * Postconditions: CustomerTable is populated with dynamically allocated Customers.
+ */
 bool Store::read_customers(const std::string& filename) {
     std::ifstream infile(filename.c_str());
     if (!infile) {
@@ -35,9 +41,13 @@ bool Store::read_customers(const std::string& filename) {
         return false;
     }
     std::string line;
-    // Only print for now because no CustomerTable implementation yet
     while (std::getline(infile, line)) {
         std::cout << line << std::endl;
+        std::istringstream stream(line);
+        int customer_id;
+        std::string first_name, last_name;
+        stream >> customer_id >> first_name >> last_name;
+        customer_table.insert(Customer(customer_id, first_name, last_name));
     }
     return true;
 }

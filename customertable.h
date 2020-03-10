@@ -34,7 +34,7 @@ private:
     // TODO this should probably be moved to the constructor and generated
     // BUT having a static table means consistent results;
     // so i'm going to keep it for testing for now
-    const unsigned char SHUFFLE[256] = {
+    unsigned char SHUFFLE[256] = {
             98,  6, 85,150, 36, 23,112,164,135,207,169,  5, 26, 64,165,219,     //  1
             61, 20, 68, 89,130, 63, 52,102, 24,229,132,245, 80,216,195,115,     //  2
             90,168,156,203,177,120,  2,190,188,  7,100,185,174,243,162, 10,     //  3

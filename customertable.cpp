@@ -50,9 +50,9 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
         m = jumps * jumps;
     }
     customers[(index + m) % size] = new Customer(c);
-    std::cout << customers[(index + m) % size] << std::endl;
+    std::cout << "Just inserted: " << customers[(index + m) % size] << " ";
     std::cout << *customers[(index + m) % size] << std::endl;
-
+    this->display_table();
     load_factor = (++elements / size);
 }
 
