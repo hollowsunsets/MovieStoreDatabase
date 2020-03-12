@@ -55,7 +55,6 @@ void test_customer() {
 }
 
 void test_store() {
-    *(int*)0 = 0;
     cout << "Testing Store class..." << endl;
     Store s;
     cout << "Testing Store.read_customers()..." << endl;
