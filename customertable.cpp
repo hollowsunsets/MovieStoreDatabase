@@ -21,11 +21,10 @@ CustomerTable::CustomerTable() {
 }
 
 CustomerTable::~CustomerTable() {
-    /*for (int i = 0; i < size; i++) {
-        if (customer_table[i] != NULL) {
-            delete customer_table[i];
-        }
-    }*/
+    for (int i = 0; i < size; i++) {
+        delete customer_table[i];
+        customer_table[i] = NULL;
+    }
     delete[] customer_table;
 }
 
