@@ -9,29 +9,34 @@
 class Movie : protected Item {
  public:
   // constructor using input line format
-  Movie(const std::string& s);
+  Movie(std::istream& s);
 
   // constructor using explicit parameters
   Movie(int stock, const std::string &director,
         int year, const std::string &title);
 
-  virtual bool operator<(const Item &m) const;
-  virtual bool operator>(const Item &m) const;
-  virtual bool operator==(const Item &m) const;
+    
+  // implemented suitably in Item
+  // virtual bool operator<(const Item &m) const;
+  // virtual bool operator>(const Item &m) const;
+  // virtual bool operator==(const Item &m) const;
 
  protected:
   std::string director;
   std::string title;
-  int year;
-  
+  int year;  
 };
 
 class ComedyMovie : protected Movie {
  public:
   // Comedy Movies are sorted by Title, then Year
-  virtual bool operator<(const Item&);
-  virtual bool operator>(const Item&);
-  virtual bool operator==(const Item&);
+
+  std::string get_key() const;
+    
+  // taken care of with get_key 
+  // virtual bool operator<(const Item&);
+  // virtual bool operator>(const Item&);
+  // virtual bool operator==(const Item&);
 
  protected:
   const static char typecode = 'F';
@@ -40,9 +45,12 @@ class ComedyMovie : protected Movie {
 class DramaMovie : protected Movie {
  public:
   // Drama Movies are sorted by Director, then Title
-  virtual bool operator<(const Item&);
-  virtual bool operator>(const Item&);
-  virtual bool operator==(const Item&);
+  // return sorting key
+  std::string get_key() const;
+
+  // virtual bool operator<(const Item&);
+  // virtual bool operator>(const Item&);
+  // virtual bool operator==(const Item&);
 
  protected:
   const static char typecode = 'D';
@@ -61,9 +69,13 @@ class ClassicMovie : protected Movie {
                int month, int year);
 
   // Classic Movies are sorted by Release Date, then Major Actor
-  virtual bool operator<(const Item&);
-  virtual bool operator>(const Item&);
-  virtual bool operator==(const Item&);
+  // return sorting key
+  std::string get_key() const;
+
+
+  // virtual bool operator<(const Item&);
+  // virtual bool operator>(const Item&);
+  // virtual bool operator==(const Item&);
   
  protected:
   const static char typecode = 'C';

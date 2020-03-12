@@ -9,30 +9,26 @@
 // see also ItemFactory
 class Item {
  public:
-  // constructor using input line format
-  Item(const std::string& s);
-  
+  // we also expect Items to implement constructor using input line format
+  Item();
+  Item(int stock);
+    
   char get_typecode() const;
 
   // add the quantity d to the item's stock
-  //(MOVE THIS TO .cpp:)
-  // if d is a positive integer and <= stock,
-  // subtract d from the item's stock and return true
-  // otherwise, do not perform the operation and return false
   bool add_stock(int d);
 
   // remove quantity d from the item's stock
-  //(MOVE THIS TO .cpp:)
-  // if d is a positive integer and <= stock,
-  // subtract d from the item's stock and return true
-  // otherwise, do not perform the operation and return false
   bool remove_stock(int d);
+
+  // get comparison key 
+  virtual std::string get_key() const = 0;
 
   // comparison operators
   // for sorting into Inventory for fast lookup
-  virtual bool operator<(const Item&) = 0;
-  virtual bool operator>(const Item&) = 0;
-  virtual bool operator==(const Item&) = 0;
+  virtual bool operator<(const Item&);
+  virtual bool operator>(const Item&);
+  virtual bool operator==(const Item&);
   
  protected:
   // amount of the item in stock
