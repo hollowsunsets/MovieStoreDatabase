@@ -15,14 +15,17 @@ CustomerTable::CustomerTable() {
     elements = 0;
     load_factor = elements / size;
     customer_table = new Customer*[INITIAL_SIZE];
+    for (int i = 0; i < INITIAL_SIZE; i++) {
+        customer_table[i] = NULL;
+    }
 }
 
 CustomerTable::~CustomerTable() {
-    for (int i = 0; i < size; i++) {
+    /*for (int i = 0; i < size; i++) {
         if (customer_table[i] != NULL) {
             delete customer_table[i];
         }
-    }
+    }*/
     delete[] customer_table;
 }
 
@@ -95,6 +98,7 @@ Customer* CustomerTable::retrieve(int id) const {
 
 void CustomerTable::display_table() const {
     std::cout << "{ " << 0 << " : ";
+    std::cout << customer_table[0];
     if (customer_table[0]) {
         std::cout << "\"" << *customer_table[0] << "\"";
     } else {
