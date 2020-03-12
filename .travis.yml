@@ -1,3 +1,13 @@
+install:
+    - sudo apt-get install -y gdb
+
+before_script:
+    - ulimit -c unlimited -S
+
+after_failure:
+    - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # Find core dump for failed build
+    - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
+
 language: cpp
 compiler: gcc
 os:       linux
