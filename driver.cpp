@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include "customer.h"
+#include "item.h"
+#include "movie.h"
 #include "store.h"
 #include <fstream>
 
@@ -134,9 +136,66 @@ void test_customer_table() {
 
 }
 
+void test_movie() {
+    std::stringstream ss;
+    ss.str("0, Aya Shameimaru, Double Spoiler, 2010");
+    ComedyMovie* cm = new ComedyMovie(ss);
+    ss.clear();
+    ss.str("0, Aya Shameimaru, Shoot the Bullet, 2005");
+    ComedyMovie* cm2 = new ComedyMovie(ss);
+    // item methods
+    //    cout << cm->get_typecode() << std::endl;
+    // assert(cm->get_typecode() == 'F');
+    assert(!cm->remove_stock(1));
+    assert(!cm->add_stock(-10));
+    assert(cm->add_stock(10));
+
+    // comedy sorting key (title, year)
+    cout << "ComedyMovie sorting keys:" << std::endl;
+    cout << cm->get_key() << std::endl;
+    cout << cm2->get_key() << std::endl;
+    assert(cm->get_key().find("Double Spoiler2010") != std::string::npos);
+    assert(*cm < *cm2);
+
+    ss.clear();
+    ss.str("15, Hata no Kokoro, Hopeless Masquerade, 2013");
+    DramaMovie* dm = new DramaMovie(ss);
+    // drama sorting key (director, title)
+    cout << "DramaMovie sorting keys:" << std::endl;
+    cout << dm->get_key() << std::endl;
+    assert(dm->get_key().find("Hata no Kokoro") != std::string::npos);
+    assert(dm->get_key().find("Hopeless Masquerade") != std::string::npos);
+
+    ss.clear();
+    ss.str("4, ZUN Soft, Lotus Land Story, Yuuka Kazami 8 1998");
+    ClassicMovie* clm = new ClassicMovie(ss);
+    ss.clear();
+    ss.str("4, ZUN Soft, Mystic Square, Yuuka Kazami 12 1998");
+    ClassicMovie* clm2 = new ClassicMovie(ss);
+    // classic sorting key (release date, then major actor)
+    cout << "ClassicMovie sorting keys:" << std::endl;
+    cout << clm->get_key() << std::endl;
+    cout << clm2->get_key() << std::endl;
+    assert(clm->get_key().find("199808") != std::string::npos);
+    assert(clm->get_key().find("Yuuka Kazami") != std::string::npos);
+    assert(*clm < *clm2);
+    
+    // error case tests?
+
+    delete cm;
+    delete cm2;
+    delete dm;
+    delete clm;
+    delete clm2;
+
+    cout << "Movie tests pass!" << endl;
+}
+
+
 int main() {
     test_customer();
     /* test_store(); Commented out for now since problems seem to originate
                      from Store's nonexistent destructor. */
     test_customer_table();
+    test_movie();
 }
