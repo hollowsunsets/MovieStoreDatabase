@@ -19,7 +19,7 @@ public:
     // record a customer's Transaction, by customer id
     void record_transaction(int id, const Transaction& transaction);
     // retrieve the customer data, by customer id
-    Customer* retrieve(int id) const;
+    Customer& retrieve(int id);
     // display table entries
     void display_table() const;
 
@@ -30,7 +30,7 @@ protected:
 
 private:
 
-    const static int INITIAL_SIZE = 32;
+    const static int INITIAL_SIZE = 2;
     // TODO this should probably be moved to the constructor and generated
     // BUT having a static table means consistent results;
     // so i'm going to keep it for testing for now
@@ -54,9 +54,9 @@ private:
     };
     int elements;
     int size;
-    int load_factor;
     Customer** customer_table;
-    void resize();
+    Customer** get_resized_table();
+    void clear();
     void insert_to_table(const Customer& c, Customer** customers);
 
 };

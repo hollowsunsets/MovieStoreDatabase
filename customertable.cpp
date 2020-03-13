@@ -13,7 +13,6 @@
 CustomerTable::CustomerTable() {
     size = INITIAL_SIZE;
     elements = 0;
-    load_factor = elements / size;
     customer_table = new Customer*[INITIAL_SIZE];
     for (int i = 0; i < INITIAL_SIZE; i++) {
         customer_table[i] = NULL;
@@ -21,14 +20,21 @@ CustomerTable::CustomerTable() {
 }
 
 CustomerTable::~CustomerTable() {
-    for (int i = 0; i < size; i++) {
-        delete customer_table[i];
-        customer_table[i] = NULL;
-    }
-    delete[] customer_table;
+    this->clear();
 }
 
 void CustomerTable::insert(const Customer& c) {
+    int load_factor = (elements + 1) / size;
+    if (load_factor > 0.5) {
+        std::cout << "Load factor: " << load_factor << std::endl;
+        // Resize the hash table by replacing it with a new table
+        this->elements = 0;
+        Customer** new_table = get_resized_table();
+        std::cout << "Table has been resized" << std::endl;
+        delete[] customer_table;
+        this->customer_table = new_table;
+        this->size = size << 1;
+    }
     this->insert_to_table(c, this->customer_table);
 }
 
@@ -38,24 +44,18 @@ void CustomerTable::insert(const Customer& c) {
 // in insert() but you cannot pass non static class members as parameters
 // Quadratic probing, where h(k, i) = (h'(k) + c_1 * i + c_2 * i^2)
 void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
-    load_factor = ++elements / size;
-    if (load_factor > 0.5) {
-        resize();
-        // Resize the hash table
-    }
+    ++elements;
     int index = hash(c.get_id());
     // quadratic probing
     int jumps = 0, m = 0;
     while (customers[(index + m) % size] != NULL &&
            customers[(index + m) % size]->get_id() != c.get_id()) {
+        std::cout << customers[(index + m) % size] << std::endl;
+        std::cout << index + m << std::endl;
         ++jumps;
         m = jumps * jumps;
     }
     customers[(index + m) % size] = new Customer(c);
-    std::cout << "Just inserted: " << customers[(index + m) % size] << " ";
-    std::cout << *customers[(index + m) % size] << std::endl;
-    this->display_table();
-    load_factor = (++elements / size);
 }
 
 void CustomerTable::remove(int id) {
@@ -73,17 +73,15 @@ void CustomerTable::remove(int id) {
 void CustomerTable::record_transaction(int id, const Transaction &transaction) {
     // search for id, then call record_transaction on it
     // use retrieve()
-    Customer* c = this->retrieve(id);
+    Customer c = this->retrieve(id);
     // TODO: Assuming retrieve returns NULL if it doesn't find anything.
     // Probably need to fix this.
-    if (c != NULL) {
-        c->record_transaction(transaction);
-    }
+    c.record_transaction(transaction);
 }
 
 // should this be returning a pointer?
 // if add transaction uses it, can't be const, at least
-Customer* CustomerTable::retrieve(int id) const {
+Customer& CustomerTable::retrieve(int id) {
     int index = hash(id);
     int jumps = 0, m = 0;
 
@@ -92,12 +90,11 @@ Customer* CustomerTable::retrieve(int id) const {
         m = jumps * jumps;
     }
     // TODO: What if the key doesn't exist in the hash table?
-    return customer_table[(index + m) % size];
+    return *customer_table[(index + m) % size];
 }
 
 void CustomerTable::display_table() const {
     std::cout << "{ " << 0 << " : ";
-    std::cout << customer_table[0];
     if (customer_table[0]) {
         std::cout << "\"" << *customer_table[0] << "\"";
     } else {
@@ -134,17 +131,27 @@ int CustomerTable::hash(int id) const {
     return ((hash_hi << 8) | hash_lo) % size;
 }
 
-void CustomerTable::resize() {
-    Customer** new_customer_table = new Customer*[size << 1];
-    this->elements = 0;
+Customer** CustomerTable::get_resized_table() {
+    std::cout << "Attemping to resize table" << std::endl;
+    int new_size = size << 1;
+    Customer** new_customer_table = new Customer*[new_size];
+    for (int i = 0; i < new_size; i++) {
+        new_customer_table[i] = NULL;
+    }
     for (int i = 0; i < size; i++) {
+        std::cout << "Inserting " << i << " to resized table" << std::endl;
         if (customer_table[i] != NULL) {
             this->insert_to_table(*customer_table[i], new_customer_table);
-            // TODO: Not sure if this even works
             delete customer_table[i];
         }
     }
+    return new_customer_table;
+}
+
+void CustomerTable::clear() {
+    for (int i = 0; i < size; i++) {
+        delete customer_table[i];
+        customer_table[i] = NULL;
+    }
     delete[] customer_table;
-    this->customer_table = new_customer_table;
-    this->size = size << 1;
 }

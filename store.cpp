@@ -49,6 +49,7 @@ bool Store::read_customers(const std::string& filename) {
         stream >> customer_id >> first_name >> last_name;
         customer_table.insert(Customer(customer_id, first_name, last_name));
     }
+    customer_table.display_table();
     return true;
 }
 
@@ -77,7 +78,6 @@ bool Store::return_item(const std::string &) {
 }
 
 void Store::display_inventory() {
-
 }
 
 void Store::display_history() {
