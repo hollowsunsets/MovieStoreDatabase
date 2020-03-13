@@ -1,19 +1,28 @@
 #include "movie.h"
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
+
+// Movie blank constructor (e.g. because the input is different)
+Movie::Movie() {
+    year = 0;
+}
 
 // Movie basic constructor
 Movie::Movie(std::istream& s) {
     year = 0;
     std::string substr;
-    std::istringstream ss;
     std::getline(s, substr, ',');
-    ss.str(substr);
+    std::istringstream ss(substr);
+
     ss >> stock;
+    s.ignore(1, ' ');
     std::getline(s, director, ',');
+    s.ignore(1, ' ');
     std::getline(s, title, ',');
     std::getline(s, substr);
+    ss.clear();
     ss.str(substr);
     ss >> year;
 }
@@ -29,15 +38,16 @@ Movie::Movie(int stock, const std::string &director,
 // Comedy Movie
 //
 std::string ComedyMovie::get_key() const {
-    std::ostringstream ss;
+    std::ostringstream ss("");
     ss << title;
-    ss << std::setw(4) << year;
+    ss << std::setfill('0') << std::setw(4) << year;
     return ss.str();
 }
 
 Item* ComedyMovie::create_item(std::istream& s) {
     return new ComedyMovie(s);
 }
+
 
 //
 // Drama Movie
@@ -55,10 +65,11 @@ Item* DramaMovie::create_item(std::istream& s) {
 // Classic Movie
 // 
 std::string ClassicMovie::get_key() const {
-    std::ostringstream ss;
-    ss << std::setw(4) << year;  // make sure these are padded
+    std::ostringstream ss("");
+    // make sure these are padded
+    ss << std::setfill('0') << std::setw(4) << year;
     ss << std::setw(2) << month;
-    ss << title;
+    ss << major_actor;
     return ss.str();
 }
 
@@ -68,20 +79,23 @@ ClassicMovie::ClassicMovie(std::istream& s) {
     // error handling?
     month = 0;
     std::string substr;
-    std::istringstream ss;
     std::getline(s, substr, ',');
-    ss.str(substr);
+    std::istringstream ss(substr);
     ss >> stock;
+    s.ignore(1, ' ');
     std::getline(s, director, ',');
+    s.ignore(1, ' ');    
     std::getline(s, title, ',');
 
+    s.ignore(1, ' ');
     std::getline(s, substr);
     // https://stackoverflow.com/a/16509599
     // get substring until second space
     size_t pos = substr.find(' ', 0);
     pos = substr.find(' ', pos + 1);
     major_actor = substr.substr(0, pos);
-    
+    substr = substr.substr(pos + 1); 
+    ss.clear();
     ss.str(substr);
     ss >> month;
     ss >> year;

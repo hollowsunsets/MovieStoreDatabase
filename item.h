@@ -12,6 +12,7 @@ class Item {
   // we also expect Items to implement constructor using input line format
   Item();
   Item(int stock);
+  ~Item();    
     
   // get comparison key 
   virtual std::string get_key() const = 0;
@@ -19,7 +20,7 @@ class Item {
   // factory interface
   virtual Item* create_item(std::istream& s) = 0;
 
-  char get_typecode() const;
+  virtual char get_typecode() const = 0;
 
   // add the quantity d to the item's stock
   bool add_stock(int d);
@@ -29,19 +30,19 @@ class Item {
     
   // comparison operators
   // for sorting into Inventory for fast lookup
-  virtual bool operator<(const Item&);
-  virtual bool operator>(const Item&);
-  virtual bool operator==(const Item&);
+  friend bool operator<(const Item&, const Item&);
+  friend bool operator>(const Item&, const Item&);
+  friend bool operator==(const Item&, const Item&);
   
  protected:
   // amount of the item in stock
   int stock;
 
-  // item subgroup type
-  // e.g. movie genre, device manufacturer
-  // must be in [A..~] (ASCII 65-126)
-  const static char typecode;
-
+  // // item subgroup type
+  // // e.g. movie genre, device manufacturer
+  // // must be in [A..~] (ASCII 65-126)
+  // const char typecode;
+    
   // derived classes have additional data fields
 };
 

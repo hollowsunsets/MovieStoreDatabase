@@ -1,19 +1,24 @@
 #include "item.h"
 
+// ALL of these need to be moved to movie...
 Item::Item() {
-    stock = 0;
+    this->stock = 0;
 };
 
 Item::Item(int stock) {
     this->stock = stock;
 }
 
+// nothing to do; probably needed to avoid
+// vtable errors
+Item::~Item() {}
+
 // getter for type
 // preconditions: none
 // postconditions: none
-char Item::get_typecode() const {
-    return typecode;
-}
+// char Item::get_typecode() const {
+//     return this->typecode;
+// }
 
 
 bool operator<(const Item &m, const Item &o) {
