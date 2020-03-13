@@ -1,5 +1,12 @@
 # MovieStoreDatabase
 
+## Overview
+
+
+### Hash Function
+
+
+
 
 ## Git Workflow
 

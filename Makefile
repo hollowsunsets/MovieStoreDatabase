@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS= -Wall -g -std=c++98
+CXXFLAGS= -Wall -ggdb -O0 -std=c++98
 
 all: driver
 
