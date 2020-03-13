@@ -45,7 +45,6 @@ void CustomerTable::insert(const Customer& c) {
         this->elements = 0;
         Customer** new_table = get_resized_table();
         // std::cout << "Table has been resized" << std::endl;
-        delete[] customer_table;
         this->customer_table = new_table;
         this->size = size << 1;
         // std::cout << "Size fields: " << elements << " " << size << std::endl;
@@ -64,10 +63,16 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
     int index = hash(c.get_id());
     // quadratic probing
     int jumps = 0, m = 0;
-    while (customers[(index + m) % size] != NULL &&
-           customers[(index + m) % size]->get_id() != c.get_id()) {
+
+    int cluster_index = (index + m) % size;
+    std::cout << "current size: " << size << std::endl;
+
+    while (cluster_index >= 0 && cluster_index < size &&
+           customers[cluster_index] != NULL &&
+           customers[cluster_index]->get_id() != c.get_id()) {
         ++jumps;
         m = jumps * jumps;
+        cluster_index = (index + m) % size;
     }
     customers[(index + m) % size] = new Customer(c);
 }
@@ -81,20 +86,29 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
 void CustomerTable::remove(int id) {
     int index = hash(id);
     int jumps = 0, m = 0;
-    while (customer_table[(index + m) % size]->get_id() != id) {
+    int cluster_index = (index + m) % size;
+    while (cluster_index >= 0 && cluster_index < size &&
+           customer_table[cluster_index]->get_id() != id) {
         ++jumps;
         m = jumps * jumps;
+        cluster_index = (index + m) % size;
     }
-    customer_table[(index + m) % size] = NULL;
+    customer_table[cluster_index] = NULL;
+
+    // Get next index of next element in cluster
+    ++jumps;
+    m = jumps * jumps;
+    cluster_index = (index + m) % size;
 
     // Rehash the keys in the same cluster
-    while (customer_table[(index + m) % size] != NULL) {
-        Customer* customer_to_rehash = customer_table[(index + m) % size];
-        customer_table[(index + m) % size] = NULL;
+    while (customer_table[cluster_index] != NULL) {
+        Customer* customer_to_rehash = customer_table[cluster_index];
+        customer_table[cluster_index] = NULL;
         --elements;
         this->insert(*customer_to_rehash);
         ++jumps;
         m = jumps * jumps;
+        cluster_index = (index + m) % size;
     }
     --elements;
 }
@@ -111,12 +125,16 @@ void CustomerTable::record_transaction(int id, const Transaction &transaction) {
 Customer& CustomerTable::retrieve(int id) {
     int index = hash(id);
     int jumps = 0, m = 0;
-    while (customer_table[(index + m) % size] != NULL) {
-        if (customer_table[(index + m) % size]->get_id() == id) {
-            return *customer_table[(index + m) % size];
+    int cluster_index = (index + m) % size;
+    std::cout << "Initial retrieve index: " << (index + m) % size << std::endl;
+
+    while (cluster_index >= 0 && customer_table[cluster_index] != NULL) {
+        if (customer_table[cluster_index]->get_id() == id) {
+            return *customer_table[cluster_index];
         }
         ++jumps;
         m = jumps * jumps;
+        cluster_index = (index + m) % size;
     }
     std::stringstream error_message;
     error_message << "The given id " << id << " does not exist in the customer table.";
@@ -195,8 +213,10 @@ Customer** CustomerTable::get_resized_table() {
  */
 void CustomerTable::clear() {
     for (int i = 0; i < size; i++) {
-        delete customer_table[i];
-        customer_table[i] = NULL;
+        if (customer_table[i] != NULL) {
+            delete customer_table[i];
+            customer_table[i] = NULL;
+        }
     }
     delete[] customer_table;
 }
