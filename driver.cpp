@@ -3,6 +3,7 @@
 #include <sstream>
 #include "customer.h"
 #include "store.h"
+#include <fstream>
 
 using namespace std;
 
@@ -88,6 +89,19 @@ void test_customer_table() {
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
+
+    cout << "\tTesting Customer table inserting many values..." << endl;
+
+    std::ifstream infile("data/data4customers.txt");
+    std::string line;
+    while (std::getline(infile, line)) {
+        std::cout << line << std::endl;
+        std::istringstream stream(line);
+        int customer_id;
+        std::string first_name, last_name;
+        stream >> customer_id >> first_name >> last_name;
+        ct.insert(Customer(customer_id, first_name, last_name));
+    }
 
     cout << "CustomerTable tests pass!" << endl;
 }

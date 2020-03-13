@@ -26,15 +26,17 @@ CustomerTable::~CustomerTable() {
 void CustomerTable::insert(const Customer& c) {
     int load_factor = (elements + 1) / size;
     if (load_factor > 0.5) {
-        std::cout << "Load factor: " << load_factor << std::endl;
+        // std::cout << "Load factor: " << load_factor << std::endl;
         // Resize the hash table by replacing it with a new table
         this->elements = 0;
         Customer** new_table = get_resized_table();
-        std::cout << "Table has been resized" << std::endl;
+        // std::cout << "Table has been resized" << std::endl;
         delete[] customer_table;
         this->customer_table = new_table;
         this->size = size << 1;
+        // std::cout << "Size fields: " << elements << " " << size << std::endl;
     }
+    // std::cout << "Now in " << c << std::endl;
     this->insert_to_table(c, this->customer_table);
 }
 
@@ -50,8 +52,6 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
     int jumps = 0, m = 0;
     while (customers[(index + m) % size] != NULL &&
            customers[(index + m) % size]->get_id() != c.get_id()) {
-        std::cout << customers[(index + m) % size] << std::endl;
-        std::cout << index + m << std::endl;
         ++jumps;
         m = jumps * jumps;
     }
@@ -132,14 +132,15 @@ int CustomerTable::hash(int id) const {
 }
 
 Customer** CustomerTable::get_resized_table() {
-    std::cout << "Attemping to resize table" << std::endl;
+    // std::cout << "Attemping to resize table" << std::endl;
     int new_size = size << 1;
+    // std::cout << "New size " << new_size << std::endl;
     Customer** new_customer_table = new Customer*[new_size];
     for (int i = 0; i < new_size; i++) {
         new_customer_table[i] = NULL;
     }
     for (int i = 0; i < size; i++) {
-        std::cout << "Inserting " << i << " to resized table" << std::endl;
+        // std::cout << "Inserting " << i << " to resized table" << std::endl;
         if (customer_table[i] != NULL) {
             this->insert_to_table(*customer_table[i], new_customer_table);
             delete customer_table[i];
