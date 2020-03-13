@@ -155,8 +155,7 @@ void test_movie() {
     cout << cm->get_key() << std::endl;
     cout << cm2->get_key() << std::endl;
     assert(cm->get_key().find("Double Spoiler2010") != std::string::npos);
-    cout << "comparison? " << (cm < cm2) << std::endl;
-    assert(cm < cm2);
+    assert(*cm < *cm2);
 
     ss.clear();
     ss.str("15, Hata no Kokoro, Hopeless Masquerade, 2013");
@@ -179,7 +178,7 @@ void test_movie() {
     cout << clm2->get_key() << std::endl;
     assert(clm->get_key().find("199808") != std::string::npos);
     assert(clm->get_key().find("Yuuka Kazami") != std::string::npos);
-    assert(clm < clm2);
+    assert(*clm < *clm2);
     
     // error case tests?
 
