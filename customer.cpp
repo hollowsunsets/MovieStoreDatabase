@@ -48,6 +48,12 @@ Customer::Customer(const Customer &c) {
   this->last_name = c.last_name;
 }
 
+// get customer's id
+// preconditions: none
+// postconditions: none
+int Customer::get_id() const {
+  return id;
+}
 
 /* record_transaction: Add a transaction to the customer's transaction history
  * Preconditions: The given Transaction must have the same ID as this Customer.
