@@ -82,6 +82,7 @@ void test_movie() {
     cout << cm->get_key() << std::endl;
     cout << cm2->get_key() << std::endl;
     assert(cm->get_key().find("Double Spoiler2010") != std::string::npos);
+    cout << "comparison? " << (cm < cm2) << std::endl;
     assert(cm < cm2);
 
     ss.clear();
