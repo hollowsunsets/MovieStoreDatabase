@@ -13,6 +13,12 @@ class Item {
   Item();
   Item(int stock);
     
+  // get comparison key 
+  virtual std::string get_key() const = 0;
+
+  // factory interface
+  virtual Item* create_item(std::istream& s) = 0;
+
   char get_typecode() const;
 
   // add the quantity d to the item's stock
@@ -20,10 +26,7 @@ class Item {
 
   // remove quantity d from the item's stock
   bool remove_stock(int d);
-
-  // get comparison key 
-  virtual std::string get_key() const = 0;
-
+    
   // comparison operators
   // for sorting into Inventory for fast lookup
   virtual bool operator<(const Item&);

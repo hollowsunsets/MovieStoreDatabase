@@ -1,27 +1,32 @@
+#include <string>
 #include <iostream>
 #include <iomanip>
 #include "movie.h"
 
 // Movie basic constructor
 Movie::Movie(std::istream& s) : Item() {
-    // int _stock = 0;
-    s >> stock;
-    // add_stock(_stock);
-    s >> director;
-    s >> year;
-    s >> title;
+    std::string substr;
+    std::istringstream ss;
+    std::getline(s, substr, ',');
+    ss.str(substr);
+    ss >> stock;
+    std::getline(s, director, ',');
+    std::getline(s, title, ',');
+    std::getline(s, substr);
+    ss.str(substr);
+    ss >> year;
 }
 // Movie basic constructor (explicit parameters)
 Movie::Movie(int stock, const std::string &director,
-             int year, const std::string &title) : Item(stock) {
+             const std::string &title, int year) : Item(stock) {
     this->director = director;
-    this->year = year;
     this->title = title;
+    this->year = year;
 }
 
 //
 // Comedy Movie
-// 
+//
 std::string ComedyMovie::get_key() const {
     std::ostringstream ss;
     ss << title;
@@ -29,11 +34,20 @@ std::string ComedyMovie::get_key() const {
     return ss.str();
 }
 
+Item* ComedyMovie::create_item(std::istream& s) {
+    return new ComedyMovie(s);
+}
+
 //
 // Drama Movie
 // 
 std::string DramaMovie::get_key() const {
     return director + title;
+}
+
+
+Item* DramaMovie::create_item(std::istream& s) {
+    return new DramaMovie(s);
 }
 
 //
@@ -45,4 +59,35 @@ std::string ClassicMovie::get_key() const {
     ss << std::setw(2) << month;
     ss << title;
     return ss.str();
+}
+
+// may have bugs, watch out for comma-delimited...
+// C, 10, Victor Fleming, The Wizard of Oz, Judy Garland 7 1939
+ClassicMovie::ClassicMovie(std::istream& s) {
+    std::string substr;
+    std::istringstream ss;
+    std::getline(s, substr, ',');
+    ss.str(substr);
+    ss >> stock;
+    std::getline(s, director, ',');
+    std::getline(s, title, ',');
+    std::getline(s, major_actor, ',');
+    std::getline(s, title, ',');
+     
+    std::getline(s, substr);
+    ss.str(substr);
+    ss >> year;
+}
+
+ClassicMovie::ClassicMovie(int stock, const std::string &director,
+                           const std::string &title,
+                           const std::string &major_actor,
+                           int month, int year)
+        : Movie(stock, director, title, year) {
+    this->major_actor = major_actor;
+    this->month = month;
+}
+
+Item* ClassicMovie::create_item(std::istream& s) {
+    return new ClassicMovie(s);
 }
