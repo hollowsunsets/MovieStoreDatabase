@@ -9,7 +9,13 @@
 // ----------------------------------------------------------------------------
 
 #include "customertable.h"
+#include <sstream>
 
+/* Constructor: Constructs a new CustomerTable.
+ * Preconditions:  N/A
+ * Postconditions: Dynamically allocates an array pointer to hold
+ *                 a size of 2 as the default lowest size.
+ */
 CustomerTable::CustomerTable() {
     size = INITIAL_SIZE;
     elements = 0;
@@ -19,10 +25,18 @@ CustomerTable::CustomerTable() {
     }
 }
 
+/* Destructor: Deallocates the contents of the CustomerTable.
+ * Preconditions: N/A
+ * Postconditions: N/A
+ */
 CustomerTable::~CustomerTable() {
     this->clear();
 }
 
+/* insert: Inserts a new Customer into the Customer Table.
+ * Preconditions: Customer c != NULL
+ * Postconditions: New Customer is dynamically allocated.
+ */
 void CustomerTable::insert(const Customer& c) {
     int load_factor = (elements + 1) / size;
     if (load_factor > 0.5) {
@@ -36,16 +50,16 @@ void CustomerTable::insert(const Customer& c) {
         this->size = size << 1;
         // std::cout << "Size fields: " << elements << " " << size << std::endl;
     }
-    // std::cout << "Now in " << c << std::endl;
     this->insert_to_table(c, this->customer_table);
 }
 
-// Private helper method
-// Doing this so we don't have to redefine insert in resize.
-// Maybe better way to do this? Tried defining customer_table as default paramater
-// in insert() but you cannot pass non static class members as parameters
-// Quadratic probing, where h(k, i) = (h'(k) + c_1 * i + c_2 * i^2)
+/* insert_to_table: Helper method that inserts the given Customer to the
+ *                  given table.
+ * Preconditions:   Customer != NULL, customers != NULL
+ * Postcondition: N/A
+ */
 void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
+
     ++elements;
     int index = hash(c.get_id());
     // quadratic probing
@@ -58,41 +72,61 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
     customers[(index + m) % size] = new Customer(c);
 }
 
+
+/* remove: Removes the Customer that corresponds with the given id
+ * Preconditions: Given id must exist within the customer table.
+ * Postconditions: Cluster of Customers with the same cluster
+ *                 as the removed Customer are rehashed.
+ */
 void CustomerTable::remove(int id) {
     int index = hash(id);
-    // quadratic probing again; note searching for a match instead of empty
     int jumps = 0, m = 0;
     while (customer_table[(index + m) % size]->get_id() != id) {
         ++jumps;
         m = jumps * jumps;
     }
     customer_table[(index + m) % size] = NULL;
-    elements--;
-}
 
-void CustomerTable::record_transaction(int id, const Transaction &transaction) {
-    // search for id, then call record_transaction on it
-    // use retrieve()
-    Customer c = this->retrieve(id);
-    // TODO: Assuming retrieve returns NULL if it doesn't find anything.
-    // Probably need to fix this.
-    c.record_transaction(transaction);
-}
-
-// should this be returning a pointer?
-// if add transaction uses it, can't be const, at least
-Customer& CustomerTable::retrieve(int id) {
-    int index = hash(id);
-    int jumps = 0, m = 0;
-
-    while (customer_table[(index + m) % size]->get_id() != id) {
+    // Rehash the keys in the same cluster
+    while (customer_table[(index + m) % size] != NULL) {
+        Customer* customer_to_rehash = customer_table[(index + m) % size];
+        customer_table[(index + m) % size] = NULL;
+        --elements;
+        this->insert(*customer_to_rehash);
         ++jumps;
         m = jumps * jumps;
     }
-    // TODO: What if the key doesn't exist in the hash table?
-    return *customer_table[(index + m) % size];
+    --elements;
 }
 
+void CustomerTable::record_transaction(int id, const Transaction &transaction) {
+    Customer c = this->retrieve(id);
+    c.record_transaction(transaction);
+}
+/* retrieve: Retrieves the Customer that corresponds with the given
+ *           ID contained in the CustomerTable.
+ * Precondition: ID must exist in the Customer Table.
+ * Postcondition: N/A
+ */
+Customer& CustomerTable::retrieve(int id) {
+    int index = hash(id);
+    int jumps = 0, m = 0;
+    while (customer_table[(index + m) % size] != NULL) {
+        if (customer_table[(index + m) % size]->get_id() == id) {
+            return *customer_table[(index + m) % size];
+        }
+        ++jumps;
+        m = jumps * jumps;
+    }
+    std::stringstream error_message;
+    error_message << "The given id " << id << " does not exist in the customer table.";
+    throw std::invalid_argument(error_message.str());
+}
+
+/* display_table: Prints an ASCII representation of the CustomerTable.
+ * Precondition:  N/A
+ * Postcondition: N/A
+ */
 void CustomerTable::display_table() const {
     std::cout << "{ " << 0 << " : ";
     if (customer_table[0]) {
@@ -111,8 +145,12 @@ void CustomerTable::display_table() const {
     std::cout << "}" << std::endl;
 }
 
-// Pearson hashing modified to yield up to 16 bits
-// we expect low entropy in the high bits of id
+/* hash: Hash function based on Pearson hashing to
+ *       yield 16 bits instead of the usual 8 bits.
+ *       Low entropy is expected in the high bits of the id.
+ * Preconditions:  Given id occupies only 16 bits.
+ * Postconditions: N/A
+ */
 int CustomerTable::hash(int id) const {
     // initialize high and low parts
     // considering using uint_8 here
@@ -131,16 +169,18 @@ int CustomerTable::hash(int id) const {
     return ((hash_hi << 8) | hash_lo) % size;
 }
 
+/* get_resized_table: Helper function that returns a pointer to a table
+ *                    with a size with the next largest power of two.
+ * Precondition:      CustomerTable is initialized.
+ * Postcondition:     Base pointer is deallocated and replaced with new array.
+ */
 Customer** CustomerTable::get_resized_table() {
-    // std::cout << "Attemping to resize table" << std::endl;
     int new_size = size << 1;
-    // std::cout << "New size " << new_size << std::endl;
     Customer** new_customer_table = new Customer*[new_size];
     for (int i = 0; i < new_size; i++) {
         new_customer_table[i] = NULL;
     }
     for (int i = 0; i < size; i++) {
-        // std::cout << "Inserting " << i << " to resized table" << std::endl;
         if (customer_table[i] != NULL) {
             this->insert_to_table(*customer_table[i], new_customer_table);
             delete customer_table[i];
@@ -149,6 +189,10 @@ Customer** CustomerTable::get_resized_table() {
     return new_customer_table;
 }
 
+/* clear: Helper function that deletes the contents of the CustomerTable.
+ * Precondition: CustomerTable is dynamically allocated
+ * Postcondition: CustomerTable is deallocated
+ */
 void CustomerTable::clear() {
     for (int i = 0; i < size; i++) {
         delete customer_table[i];
