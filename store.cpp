@@ -114,7 +114,7 @@ void Store::display_inventory() {
 }
 
 void Store::display_history() {
-    
+    customer_table.display_histories();
     // Customer* c = customer_table.retrieve(customer_id);
     // if (c == NULL) {
     //     std::cout << "Invalid customer ID: " << customer_id << std::endl;

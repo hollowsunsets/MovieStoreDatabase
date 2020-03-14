@@ -148,6 +148,14 @@ void CustomerTable::display_table() const {
     std::cout << "}" << std::endl;
 }
 
+void CustomerTable::display_histories() const {
+    for (int i = 0; i < size; ++i) {
+        if (customer_table[i]) {
+            customer_table[i]->display_history();
+        }
+    }
+}
+
 /* hash: Hash function based on Pearson hashing to
  *       yield 16 bits instead of the usual 8 bits.
  *       Low entropy is expected in the high bits of the id.

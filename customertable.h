@@ -23,6 +23,8 @@ public:
     // display table entries
     void display_table() const;
 
+    void display_histories() const;
+
 protected:
     // calculate hash location for a given id (>=0 & <=9999)
     // using modified (16-bit) Pearson's Method
