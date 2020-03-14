@@ -44,7 +44,7 @@ std::string ComedyMovie::get_key() const {
     return ss.str();
 }
 
-Item* ComedyMovie::create_item(std::istream& s) {
+ComedyMovie* ComedyMovie::create_item(std::istream& s) {
     return new ComedyMovie(s);
 }
 
@@ -57,7 +57,7 @@ std::string DramaMovie::get_key() const {
 }
 
 
-Item* DramaMovie::create_item(std::istream& s) {
+DramaMovie* DramaMovie::create_item(std::istream& s) {
     return new DramaMovie(s);
 }
 
@@ -110,6 +110,6 @@ ClassicMovie::ClassicMovie(int stock, const std::string &director,
     this->month = month;
 }
 
-Item* ClassicMovie::create_item(std::istream& s) {
+ClassicMovie* ClassicMovie::create_item(std::istream& s) {
     return new ClassicMovie(s);
 }

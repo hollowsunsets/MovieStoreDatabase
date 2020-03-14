@@ -4,6 +4,7 @@
 #include "customer.h"
 #include "item.h"
 #include "movie.h"
+#include "itemfactory.h"
 #include "store.h"
 #include <fstream>
 
@@ -152,8 +153,8 @@ void test_movie() {
 
     // comedy sorting key (title, year)
     cout << "ComedyMovie sorting keys:" << std::endl;
-    cout << cm->get_key() << std::endl;
-    cout << cm2->get_key() << std::endl;
+    cout << '\t' << cm->get_key() << std::endl;
+    cout << '\t' << cm2->get_key() << std::endl;
     assert(cm->get_key().find("Double Spoiler2010") != std::string::npos);
     assert(*cm < *cm2);
 
@@ -162,7 +163,7 @@ void test_movie() {
     DramaMovie* dm = new DramaMovie(ss);
     // drama sorting key (director, title)
     cout << "DramaMovie sorting keys:" << std::endl;
-    cout << dm->get_key() << std::endl;
+    cout << '\t' << dm->get_key() << std::endl;
     assert(dm->get_key().find("Hata no Kokoro") != std::string::npos);
     assert(dm->get_key().find("Hopeless Masquerade") != std::string::npos);
 
@@ -174,8 +175,8 @@ void test_movie() {
     ClassicMovie* clm2 = new ClassicMovie(ss);
     // classic sorting key (release date, then major actor)
     cout << "ClassicMovie sorting keys:" << std::endl;
-    cout << clm->get_key() << std::endl;
-    cout << clm2->get_key() << std::endl;
+    cout << '\t' << clm->get_key() << std::endl;
+    cout << '\t' << clm2->get_key() << std::endl;
     assert(clm->get_key().find("199808") != std::string::npos);
     assert(clm->get_key().find("Yuuka Kazami") != std::string::npos);
     assert(*clm < *clm2);
@@ -191,6 +192,44 @@ void test_movie() {
     cout << "Movie tests pass!" << endl;
 }
 
+void test_itemfactory() {
+    Item* i = ItemFactory::create_item(
+        "C, 4, ZUN Soft, Mystic Square, Alice Margatroid 12 1998");
+
+    cout << "ItemFactory: Movie creation (string arg)" << std::endl;
+    // make sure we actually got something
+    assert(i != NULL);
+    // methods still work as expected as Item*?
+    cout << '\t' << i->get_key() << std::endl;
+    assert(i->get_typecode() == 'C');
+    assert(i->get_key().find("199812") != std::string::npos);
+
+    // istream version, should just eat first line
+    cout << "ItemFactory: Movie creation (stream arg)" << std::endl;
+    stringstream ss("D, 6, TSA, Embodiment of Scarlet Devil, 2002\nD, 7, TSA, Perfect Cherry Blossom, 2003\n");
+    Item* i2 = ItemFactory::create_item(ss);
+    assert(i2 != NULL);
+    // correct movie construction?
+    cout << '\t' << i2->get_key() << std::endl;
+    assert(i2->get_key().find("Embodiment of Scarlet Devil") != std::string::npos);
+    assert(i2->get_key().find("Perfect Cherry Blossom") == std::string::npos);
+
+    cout << "ItemFactory doesn't destroy second entry:" << std::endl;
+    // stream is in a good state?
+    cout << '\t' << ss.str() << std::endl;
+    // i don't know if it's okay that the other string is still there...
+    assert(ss.str().find("D, 7, TSA, Perfect Cherry Blossom, 2003\n") != std::string::npos);
+
+    cout << "ItemFactory fails on bad item typecode:" << std::endl;
+    Item* i3 = ItemFactory::create_item("X, 0, junk data, junk data, 2020");
+    assert(i3 == NULL);
+    
+    delete i;
+    delete i2;
+    delete i3;
+
+    cout << "ItemFactory tests pass!" << std::endl;
+}
 
 int main() {
     test_customer();
@@ -198,4 +237,5 @@ int main() {
                      from Store's nonexistent destructor. */
     test_customer_table();
     test_movie();
+    test_itemfactory();
 }
