@@ -117,9 +117,9 @@ void test_customer_table() {
     std::string line;
     int size = 0;
 
-/*
+
     while (std::getline(infile, line) && size < 1) {
-        /*
+
         std::cout << "\t\tInserting " << line << std::endl;
         std::istringstream stream(line);
         int customer_id;
@@ -133,11 +133,11 @@ void test_customer_table() {
         s1.str("");
         s2.str("");
         size++;
-    }*/
+    }
 
     cout << "\tTesting Customer table simple removal..." << endl;
     assert(ct.remove(1001));
-    /*bool exception_thrown2 = false;
+    bool exception_thrown2 = false;
     try {
         ct.retrieve(1001);
     } catch (...) {
@@ -145,9 +145,9 @@ void test_customer_table() {
         exception_thrown2 = true;
     }
 
-    assert(exception_thrown2);*/
+    assert(exception_thrown2);
 
-    /*ct.display_table();
+    ct.display_table();
     assert(ct.remove(1002));
     bool exception_thrown3 = false;
     try {
@@ -158,17 +158,7 @@ void test_customer_table() {
     }
     assert(exception_thrown3);
     ct.display_table();
-
-    assert(ct.remove(1004));
-    bool exception_thrown4 = false;
-    try {
-        ct.retrieve(1004);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
-        exception_thrown4 = true;
-    }
-    assert(exception_thrown4);
-    ct.display_table();
+    
 
 
     cout << "\tTesting Customer table retrieving nonexistent key throws an exception..." << endl;
@@ -181,7 +171,7 @@ void test_customer_table() {
     }
     assert(exception_thrown);
 
-    cout << "CustomerTable tests pass!" << endl;*/
+    cout << "CustomerTable tests pass!" << endl;
 
 }
 

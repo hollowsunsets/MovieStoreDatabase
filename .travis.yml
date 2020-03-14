@@ -14,7 +14,4 @@ os:       linux
 script:
     - make
     - ./driver
-    - valgrind --leak-check=full \
-        --show-leak-kinds=all \
-        --track-origins=yes \
-        --verbose ./driver
+
