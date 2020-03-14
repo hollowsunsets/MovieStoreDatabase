@@ -220,11 +220,11 @@ Customer** CustomerTable::get_resized_table() {
         if (customer_table[i] != NULL) {
             this->insert_to_table(*customer_table[i], new_customer_table);
         }
-        //delete customer_table[i];
-        //customer_table[i] = NULL;
+        delete customer_table[i];
+        customer_table[i] = NULL;
     }
     //clear(customer_table);
-    //delete[] customer_table;
+    delete[] customer_table;
     std::cout << "\tDONE REHASHING old values..." << std::endl;
     return new_customer_table;
 }
