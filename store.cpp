@@ -89,13 +89,36 @@ bool Store::return_item(const std::string &) {
 }
 
 void Store::display_inventory() {
-    for (std::map<std::string,Item*>::iterator it = inventory['F'].begin();
-         it != inventory.end();
+    // this should really retrieve a list of item types from the factory
+    
+    for (std::map<std::string,Item*>::iterator it = inventory['F' - 'A'].begin();
+         it != inventory['F' - 'A'].end();
          ++it) {
-        std << cout << *(it->second) << std::endl;
+        it->second->print(std::cout);
+        std::cout << std::endl;
+    }
+    
+    for (std::map<std::string,Item*>::iterator it = inventory['D' - 'A'].begin();
+         it != inventory['D' - 'A'].end();
+         ++it) {
+        it->second->print(std::cout);
+        std::cout << std::endl;
+    }
+
+    for (std::map<std::string,Item*>::iterator it = inventory['C' - 'A'].begin();
+         it != inventory['C' - 'A'].end();
+         ++it) {
+        it->second->print(std::cout);
+        std::cout << std::endl;
     }
 }
 
 void Store::display_history() {
-
+    
+    // Customer* c = customer_table.retrieve(customer_id);
+    // if (c == NULL) {
+    //     std::cout << "Invalid customer ID: " << customer_id << std::endl;
+    // } else {
+    //     c->display_history();
+    // }
 }

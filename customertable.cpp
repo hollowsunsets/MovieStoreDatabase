@@ -100,27 +100,30 @@ void CustomerTable::remove(int id) {
 }
 
 void CustomerTable::record_transaction(int id, const Transaction &transaction) {
-    Customer c = this->retrieve(id);
-    c.record_transaction(transaction);
+    Customer* c = this->retrieve(id);
+    c->record_transaction(transaction);
 }
+
+// this comment is now out of date.
 /* retrieve: Retrieves the Customer that corresponds with the given
  *           ID contained in the CustomerTable.
  * Precondition: ID must exist in the Customer Table.
  * Postcondition: N/A
  */
-Customer& CustomerTable::retrieve(int id) {
+Customer* CustomerTable::retrieve(int id) {
     int index = hash(id);
     int jumps = 0, m = 0;
     while (customer_table[(index + m) % size] != NULL) {
         if (customer_table[(index + m) % size]->get_id() == id) {
-            return *customer_table[(index + m) % size];
+            return customer_table[(index + m) % size];
         }
         ++jumps;
         m = jumps * jumps;
     }
-    std::stringstream error_message;
-    error_message << "The given id " << id << " does not exist in the customer table.";
-    throw std::invalid_argument(error_message.str());
+    return NULL;
+    // std::stringstream error_message;
+    // error_message << "The given id " << id << " does not exist in the customer table.";
+    // throw std::invalid_argument(error_message.str());
 }
 
 /* display_table: Prints an ASCII representation of the CustomerTable.

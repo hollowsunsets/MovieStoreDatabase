@@ -34,6 +34,12 @@ Movie::Movie(int stock, const std::string &director,
     this->year = year;
 }
 
+void Movie::print(std::ostream& out) const {
+    out << this->get_typecode() << ", " << this->stock << ", " << this->director;
+    out << ", " << this->title << ", " << this->year;
+}
+
+
 //
 // Comedy Movie
 //
@@ -42,11 +48,6 @@ std::string ComedyMovie::get_key() const {
     ss << title;
     ss << std::setfill('0') << std::setw(4) << year;
     return ss.str();
-}
-
-std::ostream& operator<<(std::ostream& out, const ComedyMovie& m) {
-    out << m.get_typecode() << ", " << m.stock << ", " << m.director;
-    return out << ", " << m.title << ", " << m.year;
 }
 
 ComedyMovie* ComedyMovie::create_item(std::istream& s) {
@@ -59,11 +60,6 @@ ComedyMovie* ComedyMovie::create_item(std::istream& s) {
 // 
 std::string DramaMovie::get_key() const {
     return director + title;
-}
-
-std::ostream& operator<<(std::ostream& out, const DramaMovie& m) {
-    out << m.get_typecode() << ", " << m.stock << ", " << m.director;
-    return out << ", " << m.title << ", " << m.year;
 }
 
 DramaMovie* DramaMovie::create_item(std::istream& s) {
@@ -82,10 +78,10 @@ std::string ClassicMovie::get_key() const {
     return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& out, const ClassicMovie& m) {
-    out << m.get_typecode() << ", " << m.stock << ", " << m.director;
-    out << ", " << m.title << ", " << m.major_actor << " ";
-    return out << m.month << " " << m.year;
+void ClassicMovie::print(std::ostream& out) const {
+    out << this->get_typecode() << ", " << this->stock << ", " << this->director;
+    out << ", " << this->title << ", " << this->major_actor << " ";
+    out << this->month << this->year;
 }
 
 // may have bugs, watch out for comma-delimited...

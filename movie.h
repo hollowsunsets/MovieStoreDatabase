@@ -17,6 +17,8 @@ class Movie : public Item {
     Movie(int stock, const std::string &director,
           const std::string &title, int year);
 
+    virtual void print(std::ostream& out) const;
+    
     virtual char get_typecode() const = 0;
         
     // implemented suitably in Item
@@ -31,11 +33,9 @@ class Movie : public Item {
 };
 
 class ComedyMovie : public Movie {
-    friend std::ostream& operator<<(std::ostream& out, const ComedyMovie& m);
-
   public:
     ComedyMovie(std::istream& s) : Movie(s){};
-
+    
     char get_typecode() const { return 'F'; }
     
     // Comedy Movies are sorted by Title, then Year
@@ -53,8 +53,6 @@ class ComedyMovie : public Movie {
 };
 
 class DramaMovie : public Movie {
-    friend std::ostream& operator<<(std::ostream& out, const DramaMovie& m);
-    
   public:
     DramaMovie(std::istream& s) : Movie(s){};
 
@@ -76,8 +74,6 @@ class DramaMovie : public Movie {
 // the ClassicMovie derived class
 // has additional fields
 class ClassicMovie : public Movie {
-    friend std::ostream& operator<<(std::ostream& out, const ClassicMovie& m);
-    
   public:
     // constructor using input line format
     ClassicMovie(std::istream& s);
@@ -86,6 +82,8 @@ class ClassicMovie : public Movie {
     ClassicMovie(int stock, const std::string &director,
                  const std::string &title, const std::string &major_actor,
                  int month, int year);
+
+    void print(std::ostream& out) const;
     
     char get_typecode() const { return 'C'; }
 
