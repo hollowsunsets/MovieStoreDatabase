@@ -18,10 +18,7 @@ class Movie : public Item {
           const std::string &title, int year);
 
     virtual char get_typecode() const = 0;
-    
-    // factory interface for constructing movie 
-    virtual Item* create_item(std::istream& s) = 0;
-    
+        
     // implemented suitably in Item
     // virtual bool operator<(const Item &m) const;
     // virtual bool operator>(const Item &m) const;
@@ -42,8 +39,8 @@ class ComedyMovie : public Movie {
     // Comedy Movies are sorted by Title, then Year
     std::string get_key() const;
 
-    Item* create_item(std::istream& s);
-    
+    static ComedyMovie* create_item(std::istream& s);
+
     // taken care of with get_key 
     // virtual bool operator<(const Item&);
     // virtual bool operator>(const Item&);
@@ -62,7 +59,7 @@ class DramaMovie : public Movie {
     // return sorting key
     std::string get_key() const;
 
-    Item* create_item(std::istream& s);
+    static DramaMovie* create_item(std::istream& s);
     
     // virtual bool operator<(const Item&);
     // virtual bool operator>(const Item&);
@@ -83,14 +80,14 @@ class ClassicMovie : public Movie {
     ClassicMovie(int stock, const std::string &director,
                  const std::string &title, const std::string &major_actor,
                  int month, int year);
-
+    
     char get_typecode() const { return 'C'; }
 
     // Classic Movies are sorted by Release Date, then Major Actor
     // return sorting key
     std::string get_key() const;
 
-    Item* create_item(std::istream& s);
+    static ClassicMovie* create_item(std::istream& s);
 
     // virtual bool operator<(const Item&);
     // virtual bool operator>(const Item&);

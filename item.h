@@ -12,13 +12,14 @@ class Item {
   // we also expect Items to implement constructor using input line format
   Item();
   Item(int stock);
-  ~Item();    
+  virtual ~Item();
     
   // get comparison key 
   virtual std::string get_key() const = 0;
 
-  // factory interface
-  virtual Item* create_item(std::istream& s) = 0;
+  // factory interface,
+  // all concrete subclasses must implement:
+  //static Item* create_item(std::istream& s);
 
   virtual char get_typecode() const = 0;
 
