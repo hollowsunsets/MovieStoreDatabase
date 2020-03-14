@@ -79,7 +79,7 @@ void test_customer_table() {
     std::stringstream s1;
     std::stringstream s2;
     s1 << c;
-    s2 << ct.retrieve(1001);
+    s2 << *(ct.retrieve(1001));
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -88,7 +88,7 @@ void test_customer_table() {
     Customer c3(1001, "Lelouch", "Lamperouge");
     ct.insert(c3);
     s1 << c3;
-    s2 << ct.retrieve(1001);
+    s2 << *(ct.retrieve(1001));
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -106,32 +106,18 @@ void test_customer_table() {
         Customer new_customer(customer_id, first_name, last_name);
         ct.insert(Customer(customer_id, first_name, last_name));
         s1 << new_customer;
-        s2 << ct.retrieve(customer_id);
+        s2 << *(ct.retrieve(customer_id));
         assert(s1.str() == s2.str());
         s1.str("");
         s2.str("");
     }
 
-    cout << "\tTesting Customer table retrieving nonexistent key throws an exception..." << endl;
-    bool exception_thrown = false;
-    try {
-        ct.retrieve(5555);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve nonexistent id" << endl;
-        exception_thrown = true;
-    }
-    assert(exception_thrown);
+    cout << "\tTesting Customer table retrieving nonexistent key returns null." << endl;
+    assert(ct.retrieve(5555) == NULL);
 
     cout << "\tTesting Customer table simple removal..." << endl;
     ct.remove(1001);
-    bool exception_thrown2 = false;
-    try {
-        ct.retrieve(1001);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
-        exception_thrown2 = true;
-    }
-    assert(exception_thrown);
+    assert(ct.retrieve(1001) == NULL);
 
     cout << "CustomerTable tests pass!" << endl;
 
