@@ -91,12 +91,35 @@ void test_customer_table() {
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
+    cout << "!!!!!!!!!!!!!!!!!!!!1MEMORY LEAK BEGINS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "\tTesting Customer table resizing..." << endl;
+    Customer c4(1003, "Suzaku", "Kururugi");
+    ct.insert(c4);
+    s1 << c4;
+    s2 << ct.retrieve(1003);
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+    /*
+    Customer c5(1004, "Tanjiro", "Kamado");
+    ct.insert(c5);
+    s1 << c5;
+    s2 << ct.retrieve(1004);
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");*/
+
+
 
     cout << "\tTesting Customer table inserting many values..." << endl;
 
     std::ifstream infile("data/data4customers.txt");
     std::string line;
-    while (std::getline(infile, line)) {
+    int size = 0;
+
+/*
+    while (std::getline(infile, line) && size < 1) {
+        /*
         std::cout << "\t\tInserting " << line << std::endl;
         std::istringstream stream(line);
         int customer_id;
@@ -109,7 +132,44 @@ void test_customer_table() {
         assert(s1.str() == s2.str());
         s1.str("");
         s2.str("");
+        size++;
+    }*/
+
+    cout << "\tTesting Customer table simple removal..." << endl;
+    assert(ct.remove(1001));
+    /*bool exception_thrown2 = false;
+    try {
+        ct.retrieve(1001);
+    } catch (...) {
+        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
+        exception_thrown2 = true;
     }
+
+    assert(exception_thrown2);*/
+
+    /*ct.display_table();
+    assert(ct.remove(1002));
+    bool exception_thrown3 = false;
+    try {
+        ct.retrieve(1002);
+    } catch (...) {
+        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
+        exception_thrown3 = true;
+    }
+    assert(exception_thrown3);
+    ct.display_table();
+
+    assert(ct.remove(1004));
+    bool exception_thrown4 = false;
+    try {
+        ct.retrieve(1004);
+    } catch (...) {
+        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
+        exception_thrown4 = true;
+    }
+    assert(exception_thrown4);
+    ct.display_table();
+
 
     cout << "\tTesting Customer table retrieving nonexistent key throws an exception..." << endl;
     bool exception_thrown = false;
@@ -121,18 +181,7 @@ void test_customer_table() {
     }
     assert(exception_thrown);
 
-    cout << "\tTesting Customer table simple removal..." << endl;
-    ct.remove(1001);
-    bool exception_thrown2 = false;
-    try {
-        ct.retrieve(1001);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
-        exception_thrown2 = true;
-    }
-    assert(exception_thrown);
-
-    cout << "CustomerTable tests pass!" << endl;
+    cout << "CustomerTable tests pass!" << endl;*/
 
 }
 
@@ -197,5 +246,5 @@ int main() {
     /* test_store(); Commented out for now since problems seem to originate
                      from Store's nonexistent destructor. */
     test_customer_table();
-    test_movie();
+    // test_movie();
 }

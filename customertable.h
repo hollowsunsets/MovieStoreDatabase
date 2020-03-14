@@ -15,7 +15,7 @@ public:
     // void insert(const Customer& c, Customer** customers
     void insert(const Customer &c);
     // remove a customer from the table
-    void remove(int id);
+    bool remove(int id);
     // record a customer's Transaction, by customer id
     void record_transaction(int id, const Transaction& transaction);
     // retrieve the customer data, by customer id
@@ -56,8 +56,11 @@ private:
     int size;
     Customer** customer_table;
     Customer** get_resized_table();
+
     void clear();
+    void clear(Customer** customer_table);
     void insert_to_table(const Customer& c, Customer** customers);
+    int probe_size(int jumps);
 
 };
 

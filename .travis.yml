@@ -1,5 +1,6 @@
 install:
     - sudo apt-get install -y gdb
+    - sudo apt-get install -y valgrind
 
 before_script:
     - ulimit -c unlimited -S
