@@ -22,6 +22,7 @@ Store::Store() {
 }
 
 Store::~Store() {
+    
 }
 
 bool Store::read_inventory(const std::string& filename) {
@@ -57,20 +58,30 @@ bool Store::read_commands(const std::string& filename) {
 
 }
 
-void Store::add_customer(Customer &) {
-
+void Store::add_customer(Customer& customer) {
+    customer_table.insert(customer);
 }
 
-void Store::add_item(Item *) {
-
+void Store::add_item(Item* i) {
+    inventory[i->get_typecode() - 'A'][i->get_key()] = i;
 }
+
+Item* Store::get_item(char typecode, const std::string& key) {
+    std::map<std::string,Item*>::iterator itemq;
+    itemq = inventory[typecode - 'A'].find(key);
+    if (itemq != inventory[typecode - 'A'].end()) {
+        return itemq->second;
+    }
+    return NULL;
+}
+
 
 bool Store::execute_transaction(Transaction &) {
 
 }
 
 bool Store::borrow_item(const std::string &) {
-
+    
 }
 
 bool Store::return_item(const std::string &) {
@@ -78,6 +89,11 @@ bool Store::return_item(const std::string &) {
 }
 
 void Store::display_inventory() {
+    for (std::map<std::string,Item*>::iterator it = inventory['F'].begin();
+         it != inventory.end();
+         ++it) {
+        std << cout << *(it->second) << std::endl;
+    }
 }
 
 void Store::display_history() {

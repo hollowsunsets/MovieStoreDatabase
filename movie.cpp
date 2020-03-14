@@ -44,6 +44,11 @@ std::string ComedyMovie::get_key() const {
     return ss.str();
 }
 
+std::ostream& operator<<(std::ostream& out, const ComedyMovie& m) {
+    out << m.get_typecode() << ", " << m.stock << ", " << m.director;
+    return out << ", " << m.title << ", " << m.year;
+}
+
 ComedyMovie* ComedyMovie::create_item(std::istream& s) {
     return new ComedyMovie(s);
 }
@@ -56,6 +61,10 @@ std::string DramaMovie::get_key() const {
     return director + title;
 }
 
+std::ostream& operator<<(std::ostream& out, const DramaMovie& m) {
+    out << m.get_typecode() << ", " << m.stock << ", " << m.director;
+    return out << ", " << m.title << ", " << m.year;
+}
 
 DramaMovie* DramaMovie::create_item(std::istream& s) {
     return new DramaMovie(s);
@@ -71,6 +80,12 @@ std::string ClassicMovie::get_key() const {
     ss << std::setw(2) << month;
     ss << major_actor;
     return ss.str();
+}
+
+std::ostream& operator<<(std::ostream& out, const ClassicMovie& m) {
+    out << m.get_typecode() << ", " << m.stock << ", " << m.director;
+    out << ", " << m.title << ", " << m.major_actor << " ";
+    return out << m.month << " " << m.year;
 }
 
 // may have bugs, watch out for comma-delimited...

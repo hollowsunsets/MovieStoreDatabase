@@ -31,6 +31,8 @@ class Movie : public Item {
 };
 
 class ComedyMovie : public Movie {
+    friend std::ostream& operator<<(std::ostream& out, const ComedyMovie& m);
+
   public:
     ComedyMovie(std::istream& s) : Movie(s){};
 
@@ -51,6 +53,8 @@ class ComedyMovie : public Movie {
 };
 
 class DramaMovie : public Movie {
+    friend std::ostream& operator<<(std::ostream& out, const DramaMovie& m);
+    
   public:
     DramaMovie(std::istream& s) : Movie(s){};
 
@@ -72,6 +76,8 @@ class DramaMovie : public Movie {
 // the ClassicMovie derived class
 // has additional fields
 class ClassicMovie : public Movie {
+    friend std::ostream& operator<<(std::ostream& out, const ClassicMovie& m);
+    
   public:
     // constructor using input line format
     ClassicMovie(std::istream& s);
