@@ -83,6 +83,10 @@ void test_store() {
     cout << "Testing Store.read_customers()..." << endl;
     assert(s.read_customers("data/data4customers.txt"));
 
+    cout << "Testing Store.read_commands()..." << endl;
+    assert(s.read_customers("data/data4commands.txt"));
+
+    
     cout << "Store tests pass!" << endl;
 }
 
