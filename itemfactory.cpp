@@ -49,9 +49,16 @@ std::string ItemFactory::item_data_to_key(const std::string& s) {
     while (ss.peek() == ' ') {
         ss.ignore(1, ' ');
     }
-    
+    // discard DVD specifier
+    char itemcode = ss.get();
+    while (ss.peek() == ' ') {
+        ss.ignore(1, ' ');
+    }
+
     char typecode = ss.get();
-    ss.ignore(1, ',');
+    while (ss.peek() == ',') {
+        ss.ignore(1, ',');
+    }
     while (ss.peek() == ' ') {
         ss.ignore(1, ' ');
     }
