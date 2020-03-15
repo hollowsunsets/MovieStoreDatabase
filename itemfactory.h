@@ -16,6 +16,8 @@ class ItemFactory {
     // return a pointer to Item specified by s or NULL if invalid
     static Item* create_item(const std::string& s);
 
+    static std::string item_data_to_key(const std::string& data);
+    
 };
 
 #endif // ITEMFACTORY_H
