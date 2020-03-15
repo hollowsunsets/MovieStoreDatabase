@@ -88,16 +88,14 @@ bool Store::read_commands(const std::string& filename) {
         std::cout << "File " << filename << " could not be opened." << std::endl;
         return false;
     }
-    bool valid = true;
+    // bool valid = true;
     std::string line;
     while (std::getline(infile, line)) {
         Transaction* transaction = TransactionFactory::create_transaction(line);
         if (transaction != NULL) {
-            valid &= execute_transaction(transaction);
-            // this may not be correct: don't customers store them?
-            // delete transaction;
+            execute_transaction(transaction);
         } else {
-            //valid = false;
+
         }
     }
     infile.close();
@@ -128,60 +126,62 @@ Item* Store::get_item(char typecode, const std::string& key) {
     return NULL;
 }
 
-
 bool Store::execute_transaction(Transaction* transaction) {
     std::string item_key;
     Customer* customer;
     switch (transaction->get_transaction_type()) {
     case 'I':
         display_inventory();
+        delete transaction;
         return true;
     case 'H':
         if(!display_history(transaction->customer_id)) {
             std::cout << "Invalid transaction: " << transaction << std::endl;
-            return false;
+            break;
         }
+        delete transaction;
         return true;
     case 'B':
         item_key = ItemFactory::item_data_to_key(transaction->data);
-        std::cout << "borrow key: " << item_key << std::endl;
+        // std::cout << "borrow key: " << item_key << std::endl;
         customer = customer_table->retrieve(transaction->customer_id);
         if (!customer) {
             std::cout << "Invalid customer ID: " <<
                     transaction->customer_id << std::endl;
-            return false;
+            break;
         }
         if(!borrow_item(transaction->data[2], item_key)) {
             std::cout << "Not in stock: " << transaction->data << std::endl;
-            return false;
+            break;
         }
         customer->borrow_item(item_key);
         customer->record_transaction(transaction);
         return true;
     case 'R':
         item_key = ItemFactory::item_data_to_key(transaction->data);
-        std::cout << "return key: " << item_key << std::endl;
+        // std::cout << "return key: " << item_key << std::endl;
         customer = customer_table->retrieve(transaction->customer_id);
         if (!customer) {
             std::cout << "Invalid customer ID: " <<
                     transaction->customer_id << std::endl;
-            return false;
+            break;
         }
         if (!customer->return_item(item_key)) {
             std::cout << "Item not borrowed: " << transaction->data << std::endl;
-            return false;
+            break;
         }
-        customer->record_transaction(transaction);
         if (!return_item(transaction->data[2], item_key)) {
             std::cout << "Item cannot be returned: "
                       << transaction->data << std::endl;
-            return false;
+            break;
         }
-        
+        customer->record_transaction(transaction);        
         return true;
     default:
-        return false;
+        break;
     }
+    delete transaction;
+    return false;
 }
 
 bool Store::borrow_item(char typecode, const std::string& key) {
@@ -195,6 +195,7 @@ bool Store::return_item(char typecode, const std::string& key) {
     return item != NULL && item->add_stock(1);    
 }
 
+// display Comedy movie, Drama movie, and Classic movie inventories
 void Store::display_inventory() {
     // this should really retrieve a list of item types from the factory
     
