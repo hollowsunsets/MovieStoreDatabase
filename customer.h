@@ -26,7 +26,7 @@ class Customer {
   Customer(const Customer& c);
 
   // record a transaction to the customer's history 
-  bool record_transaction(const Transaction& t);
+  bool record_transaction(Transaction* t);
   // add an item specifier to the customer's borrows list
   bool borrow_item(const std::string& item_key);
   // remove an item from the customer's borrows list,
@@ -40,7 +40,7 @@ class Customer {
   std::string first_name;
   std::string last_name;
   std::vector<std::string> borrows;
-  std::deque<Transaction> transaction_history;
+  std::deque<Transaction*> transaction_history;
 };
 
 #endif // CUSTOMER_H

@@ -59,8 +59,8 @@ int Customer::get_id() const {
  * Preconditions: The given Transaction must have the same ID as this Customer.
  * Postconditions: Transaction history should print in reverse chronological order.
  */
-bool Customer::record_transaction(const Transaction& t) {
-  if (t.customer_id != this->id) {
+bool Customer::record_transaction(Transaction* t) {
+  if (t->customer_id != this->id) {
     return false;
   }
   transaction_history.push_back(t);
@@ -97,14 +97,15 @@ bool Customer::return_item(const std::string& item_key) {
  * Preconditions: N/A
  * Postconditions: N/A
  */
+
 void Customer::display_history(std::ostream& out) const {
-  std::deque<Transaction>::const_iterator it = transaction_history.begin();
+  std::deque<Transaction*>::const_iterator it = transaction_history.begin();
   out << " history: [";
   if (it != transaction_history.end()) {
-      out << " " << *it++ << " ";
+      out << " " << (*it++) << " ";
   }
   while (it != transaction_history.end()) {
-      out << "| " << *it++ << " ";
+      out << "| " << (*it++) << " ";
   }
   out << "]"  << std::endl;
 }

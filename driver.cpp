@@ -1,12 +1,16 @@
 #include <assert.h>
 #include <iostream>
 #include <sstream>
+#include <fstream>
+
+
 #include "customer.h"
 #include "item.h"
 #include "movie.h"
 #include "itemfactory.h"
 #include "store.h"
-#include <fstream>
+#include "transaction.h"
+#include "transactionfactory.h"
 
 using namespace std;
 
@@ -42,8 +46,8 @@ void test_customer() {
     s2.str("");
 
     cout << "\tTesting Customer record_transaction..." << endl;
-    Transaction t('B', 1001, 'D', 'C', "9 1938 Katherine Hepburn");
-    Transaction t2('R', 1001, 'D', 'C', "9 1938 Katherine Hepburn");
+    Transaction* t = TransactionFactory::create_transaction("B 1001 D C 9 1938 Katherine Hepburn");
+    Transaction* t2 = TransactionFactory::create_transaction("R 1001 D C 9 1938 Katherine Hepburn");
     assert(c.record_transaction(t));
     assert(c.record_transaction((t2)));
     assert(!c1.record_transaction(t));
@@ -64,6 +68,8 @@ void test_customer() {
     cout << "\t\tReturning Dichromatic Lotus Butterfly" << endl;
     assert(c.return_item("Dichromatic Lotus Butterfly"));
 
+    delete t;
+    delete t2;
     cout << "Customer tests pass!" << endl;
 }
 
@@ -279,6 +285,54 @@ void test_itemfactory() {
     cout << "ItemFactory tests pass!" << std::endl;
 }
 
+void test_transaction() {
+    cout << "Testing TransactionFactory, Transaction class and subclasses ... " << endl;
+    stringstream s1;
+    stringstream s2;
+    cout << "\tTest that Transaction creates Transactions of the appropriate subclass" << endl;
+    Transaction* borrow_t = TransactionFactory::create_transaction("B 1234 D D Steven Spielberg, Schindler's List,");
+    assert(borrow_t->get_transaction_type() == 'B');
+    cout << "\t\t" << borrow_t << endl;
+    s1 << borrow_t;
+    s2 << "B 1234 D D Steven Spielberg, Schindler's List,";
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    Transaction* return_t = TransactionFactory::create_transaction("R 1234 D C 9 1938 Katherine Hepburn");
+    assert(return_t->get_transaction_type() == 'R');
+    cout << "\t\t" << return_t << endl;
+    s1 << return_t;
+    s2 << "R 1234 D C 9 1938 Katherine Hepburn";
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    Transaction* inventory_t = TransactionFactory::create_transaction("I");
+    assert(inventory_t->get_transaction_type() == 'I');
+    cout << "\t\t" << inventory_t << endl;
+    s1 << inventory_t;
+    s2 << "I";
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    Transaction* history_t = TransactionFactory::create_transaction("H 1234");
+    assert(history_t->get_transaction_type() == 'H');
+    s1 << history_t;
+    s2 << "H 1234 ";
+    cout << "\t\tActual: \"" << history_t << "\"" << endl;
+    cout << "\t\tExpected: \"" << s2.str() << "\"" << endl;
+
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    cout << "\tTest that Transaction with invalid type is returned as NULL" << endl;
+    Transaction* invalid_t = TransactionFactory::create_transaction("X 1234 Z C 9 1938 Katherine Hepburn");
+    assert(invalid_t == NULL);
+}
+
 int main() {
     test_customer();
     /* test_store(); Commented out for now since problems seem to originate
@@ -286,4 +340,5 @@ int main() {
     test_customer_table();
     test_movie();
     test_itemfactory();
+    test_transaction();
 }
