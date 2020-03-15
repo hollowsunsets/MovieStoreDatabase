@@ -108,10 +108,10 @@ void Customer::display_history(std::ostream& out) const {
   std::deque<Transaction*>::const_iterator it = transaction_history.begin();
   out << " history: [";
   if (it != transaction_history.end()) {
-      out << " " << (*it++) << " ";
+      out << "\n";
   }
   while (it != transaction_history.end()) {
-      out << "| " << (*it++) << " ";
+      out << "\t" << (*it++) << "\n";
   }
   out << "]";
 }
