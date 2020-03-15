@@ -58,6 +58,16 @@ void test_customer() {
     assert(s1.str() == "Customer 1001, Reimu Hakurei history: "
                        "[ B 1001 D C 9 1938 Katherine Hepburn | "
                        "R 1001 D C 9 1938 Katherine Hepburn ]\n");
+
+    cout << "\tTesting Customer borrow and return..." << endl;
+    //string format doesn't matter
+    cout << "\t\tBorrowing Dichromatic Lotus Butterfly" << endl;
+    assert(c.borrow_item("Dichromatic Lotus Butterfly"));
+    cout << "\t\tTrying to return Eastern Mystical Love Consultation" << endl;
+    assert(!c.return_item("Eastern Mystical Love Consultation"));
+    cout << "\t\tReturning Dichromatic Lotus Butterfly" << endl;
+    assert(c.return_item("Dichromatic Lotus Butterfly"));
+
     delete t;
     delete t2;
     cout << "Customer tests pass!" << endl;
