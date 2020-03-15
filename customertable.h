@@ -15,7 +15,7 @@
 
 // table of Customer data for a Store
 // operations are constant amortized time
-class CustomerTable {i
+class CustomerTable {
 public:
     CustomerTable();
     ~CustomerTable();
