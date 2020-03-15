@@ -1,3 +1,13 @@
+// --------------------------- CustomerTable.h ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification:
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the CustomerTable class
+// ----------------------------------------------------------------------------
+
 #ifndef CUSTOMERTABLE_H
 #define CUSTOMERTABLE_H
 
@@ -11,8 +21,6 @@ public:
     ~CustomerTable();
 
     // add a new customer record to the table
-    // TODO: How to use customer_table as default parameter here?
-    // void insert(const Customer& c, Customer** customers
     void insert(const Customer &c);
     // remove a customer from the table
     bool remove(int id);
@@ -31,9 +39,6 @@ protected:
 private:
 
     const static int INITIAL_SIZE = 2;
-    // TODO this should probably be moved to the constructor and generated
-    // BUT having a static table means consistent results;
-    // so i'm going to keep it for testing for now
     unsigned char SHUFFLE[256] = {
             98,  6, 85,150, 36, 23,112,164,135,207,169,  5, 26, 64,165,219,     //  1
             61, 20, 68, 89,130, 63, 52,102, 24,229,132,245, 80,216,195,115,     //  2
@@ -58,7 +63,6 @@ private:
     Customer** get_resized_table();
 
     void clear();
-    void clear(Customer** customer_table);
     void insert_to_table(const Customer& c, Customer** customers);
     int probe_size(int jumps);
 

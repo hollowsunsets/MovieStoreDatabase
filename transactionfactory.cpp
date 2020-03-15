@@ -1,3 +1,13 @@
+// --------------------------- TransactionFactory.h ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 24, 2020
+// Date of Last Modification:
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the TransactionFactory class
+// ----------------------------------------------------------------------------
+
 #include "transactionfactory.h"
 #include <sstream>
 #include <string>

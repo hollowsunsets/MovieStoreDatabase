@@ -107,6 +107,6 @@ void Customer::display_history(std::ostream& out) const {
   while (it != transaction_history.end()) {
       out << "| " << (*it++) << " ";
   }
-  out << "]"  << std::endl;
+  out << "]";
 }
 

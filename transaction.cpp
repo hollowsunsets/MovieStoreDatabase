@@ -1,3 +1,13 @@
+// --------------------------- Transaction.cpp ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 24, 2020
+// Date of Last Modification:
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Declaring and defining the functions of the Transaction class
+// ----------------------------------------------------------------------------
+
 #include "transaction.h"
 #include <string>
 #include <sstream>
