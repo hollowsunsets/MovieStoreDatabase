@@ -88,16 +88,14 @@ bool Store::read_commands(const std::string& filename) {
         std::cout << "File " << filename << " could not be opened." << std::endl;
         return false;
     }
-    bool valid = true;
+    // bool valid = true;
     std::string line;
     while (std::getline(infile, line)) {
         Transaction* transaction = TransactionFactory::create_transaction(line);
         if (transaction != NULL) {
-            valid &= execute_transaction(transaction);
-            // this may not be correct: don't customers store them?
-            // delete transaction;
+            execute_transaction(transaction);
         } else {
-            //valid = false;
+
         }
     }
     infile.close();
@@ -144,7 +142,7 @@ bool Store::execute_transaction(Transaction* transaction) {
         return true;
     case 'B':
         item_key = ItemFactory::item_data_to_key(transaction->data);
-        std::cout << "borrow key: " << item_key << std::endl;
+        // std::cout << "borrow key: " << item_key << std::endl;
         customer = customer_table->retrieve(transaction->customer_id);
         if (!customer) {
             std::cout << "Invalid customer ID: " <<
@@ -160,7 +158,7 @@ bool Store::execute_transaction(Transaction* transaction) {
         return true;
     case 'R':
         item_key = ItemFactory::item_data_to_key(transaction->data);
-        std::cout << "return key: " << item_key << std::endl;
+        // std::cout << "return key: " << item_key << std::endl;
         customer = customer_table->retrieve(transaction->customer_id);
         if (!customer) {
             std::cout << "Invalid customer ID: " <<
