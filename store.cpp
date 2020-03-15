@@ -29,6 +29,23 @@ Store::Store() {
 
 Store::~Store() {
     delete customer_table;
+    for (std::map<std::string,Item*>::iterator it = inventory['F' - 'A'].begin();
+         it != inventory['F' - 'A'].end();
+         ++it) {
+        delete it->second;
+    }
+    
+    for (std::map<std::string,Item*>::iterator it = inventory['D' - 'A'].begin();
+         it != inventory['D' - 'A'].end();
+         ++it) {
+        delete it->second;
+    }
+
+    for (std::map<std::string,Item*>::iterator it = inventory['C' - 'A'].begin();
+         it != inventory['C' - 'A'].end();
+         ++it) {
+        delete it->second;
+    }    
 }
 
 
