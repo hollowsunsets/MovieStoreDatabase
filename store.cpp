@@ -13,11 +13,7 @@
 #include "itemfactory.h"
 #include "customer.h"
 #include "customertable.h"
-<<<<<<< HEAD
-=======
 #include "itemfactory.h"
-#include "transactionfactory.h"
->>>>>>> 7c5ca32c12315ad18497447e3c3168d6474b2691
 #include "transaction.h"
 #include "transactionfactory.h"
 
