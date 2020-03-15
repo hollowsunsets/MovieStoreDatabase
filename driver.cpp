@@ -92,12 +92,25 @@ void test_customer_table() {
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
+    cout << "!!!!!!!!!!!!!!!!!!!!1MEMORY LEAK BEGINS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "\tTesting Customer table resizing..." << endl;
+    Customer c4(1003, "Suzaku", "Kururugi");
+    ct.insert(c4);
+    s1 << c4;
+    s2 << ct.retrieve(1003);
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
 
     cout << "\tTesting Customer table inserting many values..." << endl;
 
     std::ifstream infile("data/data4customers.txt");
     std::string line;
-    while (std::getline(infile, line)) {
+    int size = 0;
+
+
+    while (std::getline(infile, line) && size < 1) {
+
         std::cout << "\t\tInserting " << line << std::endl;
         std::istringstream stream(line);
         int customer_id;
@@ -110,6 +123,7 @@ void test_customer_table() {
         assert(s1.str() == s2.str());
         s1.str("");
         s2.str("");
+        size++;
     }
 
     cout << "\tTesting Customer table retrieving nonexistent key returns null." << endl;
