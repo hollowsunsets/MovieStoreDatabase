@@ -230,7 +230,7 @@ bool Store::display_history() {
 bool Store::display_history(int id) {
     Customer* c = customer_table->retrieve(id);
     if (c) {
-        c->display_history();
+        std::cout << *c << std::endl;
         return true;
     }
 
