@@ -35,8 +35,8 @@ public:
     void display_history();
 private:
     Item* get_item(char typecode, const std::string& key);
+    CustomerTable* customer_table;
     std::map<std::string, Item*> inventory[INVENTORY_SIZE];
-    CustomerTable customer_table;
 };
 
 #endif // STORE_H

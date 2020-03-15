@@ -21,11 +21,11 @@
 #include <exception>
 
 Store::Store() {
-    customer_table = CustomerTable();
+    customer_table = new CustomerTable();
 }
 
 Store::~Store() {
-    
+    delete customer_table;
 }
 
 bool Store::read_inventory(const std::string& filename) {
@@ -51,9 +51,10 @@ bool Store::read_customers(const std::string& filename) {
         int customer_id;
         std::string first_name, last_name;
         stream >> customer_id >> first_name >> last_name;
-        customer_table.insert(Customer(customer_id, first_name, last_name));
+        Customer c = Customer(customer_id, first_name, last_name);
+        customer_table->insert(c);
     }
-    customer_table.display_table();
+    customer_table->display_table();
     return true;
 }
 
@@ -70,7 +71,7 @@ bool Store::read_commands(const std::string& filename) {
 }
 
 void Store::add_customer(Customer& customer) {
-    customer_table.insert(customer);
+    customer_table->insert(customer);
 }
 
 void Store::add_item(Item* i) {
@@ -125,8 +126,8 @@ void Store::display_inventory() {
 }
 
 void Store::display_history() {
-    customer_table.display_histories();
-    // Customer* c = customer_table.retrieve(customer_id);
+    customer_table->display_histories();
+    // Customer* c = customer_table->retrieve(customer_id);
     // if (c == NULL) {
     //     std::cout << "Invalid customer ID: " << customer_id << std::endl;
     // } else {

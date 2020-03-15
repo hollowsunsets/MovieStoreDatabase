@@ -68,8 +68,9 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
 
     int cluster_index = (index + m) & (size - 1);
 
-    while (cluster_index >= 0 && cluster_index < size && customers[cluster_index] != NULL &&
-           customers[cluster_index]->get_id() != c.get_id()) {
+    while (cluster_index >= 0 && cluster_index < size
+           && customers[cluster_index] != NULL
+           && customers[cluster_index]->get_id() != c.get_id()) {
         m = probe_size(++jumps);
         cluster_index = (index + m) & (size - 1);
     }
