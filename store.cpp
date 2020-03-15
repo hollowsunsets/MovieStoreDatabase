@@ -11,11 +11,14 @@
 #include "store.h"
 #include "customer.h"
 #include "customertable.h"
+#include "transactionfactory.h"
+#include "transaction.h"
 
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <exception>
 
 Store::Store() {
     customer_table = CustomerTable();
@@ -55,7 +58,15 @@ bool Store::read_customers(const std::string& filename) {
 }
 
 bool Store::read_commands(const std::string& filename) {
-
+    std::ifstream infile(filename.c_str());
+    if (!infile) {
+        std::cout << "File " << filename << " could not be opened." << std::endl;
+        return false;
+    }
+    std::string line;
+    while (std::getline(infile, line)) {
+    }
+    return true;
 }
 
 void Store::add_customer(Customer& customer) {

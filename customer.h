@@ -14,6 +14,7 @@
 #include <stack>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "transaction.h"
 #include "item.h"
 
@@ -23,7 +24,14 @@ class Customer {
   
   Customer(int id, const std::string first_name, const std::string last_name);
   Customer(const Customer& c);
-  bool record_transaction(const Transaction& t);
+
+  // record a transaction to the customer's history 
+  bool record_transaction(Transaction* t);
+  // add an item specifier to the customer's borrows list
+  bool borrow_item(const std::string& item_key);
+  // remove an item from the customer's borrows list,
+  // returning FALSE if the item was not borrowed 
+  bool return_item(const std::string& item_key);
   void display_history(std::ostream& out = std::cout) const;
   int get_id() const;
 
@@ -31,7 +39,8 @@ class Customer {
   int id;
   std::string first_name;
   std::string last_name;
-  std::deque<Transaction> transaction_history;
+  std::vector<std::string> borrows;
+  std::deque<Transaction*> transaction_history;
 };
 
 #endif // CUSTOMER_H
