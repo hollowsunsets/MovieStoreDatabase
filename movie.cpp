@@ -81,7 +81,7 @@ std::string ClassicMovie::get_key() const {
 void ClassicMovie::print(std::ostream& out) const {
     out << this->get_typecode() << ", " << this->stock << ", " << this->director;
     out << ", " << this->title << ", " << this->major_actor << " ";
-    out << this->month << this->year;
+    out << this->month << " " << this->year;
 }
 
 // may have bugs, watch out for comma-delimited...

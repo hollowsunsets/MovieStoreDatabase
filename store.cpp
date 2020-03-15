@@ -9,16 +9,18 @@
 // ----------------------------------------------------------------------------
 
 #include "store.h"
+#include "item.h"
+#include "itemfactory.h"
 #include "customer.h"
 #include "customertable.h"
-#include "transactionfactory.h"
 #include "transaction.h"
+#include "transactionfactory.h"
 
-#include <string>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <exception>
+#include <string>
 
 Store::Store() {
     customer_table = new CustomerTable();
@@ -28,8 +30,27 @@ Store::~Store() {
     delete customer_table;
 }
 
-bool Store::read_inventory(const std::string& filename) {
 
+bool Store::read_inventory(const std::string& filename) {
+    std::ifstream infile(filename.c_str());
+    if (!infile) {
+        std::cout << "File " << filename << " could not be opened." << std::endl;
+        return false;
+    }
+
+    std::string line;
+    Item* item;
+    while (std::getline(infile, line)) {
+        item = ItemFactory::create_item(line);
+        if (item == NULL) {
+            std::cout << "Ignoring invalid item: " << line << std::endl;
+        } else {
+            add_item(item);
+        }
+    }
+
+    infile.close();
+    return true;
 }
 
 /* read_customers: Builds a CustomerTable from the contents of
@@ -55,6 +76,8 @@ bool Store::read_customers(const std::string& filename) {
         customer_table->insert(c);
     }
     customer_table->display_table();
+
+    infile.close();
     return true;
 }
 
@@ -67,6 +90,7 @@ bool Store::read_commands(const std::string& filename) {
     std::string line;
     while (std::getline(infile, line)) {
     }
+    infile.close();
     return true;
 }
 
@@ -75,6 +99,9 @@ void Store::add_customer(Customer& customer) {
 }
 
 void Store::add_item(Item* i) {
+    if (i == NULL) {
+        return;
+    }
     inventory[i->get_typecode() - 'A'][i->get_key()] = i;
 }
 
@@ -127,10 +154,4 @@ void Store::display_inventory() {
 
 void Store::display_history() {
     customer_table->display_histories();
-    // Customer* c = customer_table->retrieve(customer_id);
-    // if (c == NULL) {
-    //     std::cout << "Invalid customer ID: " << customer_id << std::endl;
-    // } else {
-    //     c->display_history();
-    // }
 }

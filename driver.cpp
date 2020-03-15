@@ -76,6 +76,10 @@ void test_customer() {
 void test_store() {
     cout << "Testing Store class..." << endl;
     Store s;
+    cout << "Testing Store.read_inventory()..." << endl;
+    assert(s.read_inventory("data/data4movies.txt"));
+    cout << "Displaying Store inventory..." << endl;
+    s.display_inventory();
     cout << "Testing Store.read_customers()..." << endl;
     assert(s.read_customers("data/data4customers.txt"));
 
