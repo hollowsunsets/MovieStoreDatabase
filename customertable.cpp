@@ -163,7 +163,7 @@ void CustomerTable::display_table() const {
 void CustomerTable::display_histories() const {
     for (int i = 0; i < size; ++i) {
         if (customer_table[i]) {
-            customer_table[i]->display_history();
+            std::cout << *customer_table[i] << std::endl;
         }
     }
 }

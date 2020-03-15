@@ -65,9 +65,9 @@ void test_customer() {
     cout << "\tTesting Customer display_history..." << endl;
     s1 << c;
     cout << "\t\t" << c << endl;
-    assert(s1.str() == "Customer 1001, Reimu Hakurei history: "
-                       "[ B 1001 D C 9 1938 Katherine Hepburn | "
-                       "R 1001 D C 9 1938 Katherine Hepburn ]");
+    assert(s1.str() == "Customer 1001, Reimu Hakurei history: [\n"
+                       "\tB 1001 D C 9 1938 Katherine Hepburn\n"
+                       "\tR 1001 D C 9 1938 Katherine Hepburn\n]");
 
     cout << "\tTesting Customer borrow and return..." << endl;
     //string format doesn't matter
