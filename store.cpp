@@ -151,7 +151,7 @@ bool Store::execute_transaction(Transaction* transaction) {
                     transaction->customer_id << std::endl;
             return false;
         }
-        if(!borrow_item(transaction->data[0], item_key)) {
+        if(!borrow_item(transaction->data[2], item_key)) {
             std::cout << "Not in stock: " << transaction->data << std::endl;
             return false;
         }
@@ -172,7 +172,7 @@ bool Store::execute_transaction(Transaction* transaction) {
             return false;
         }
         customer->record_transaction(transaction);
-        if (!return_item(transaction->data[0], item_key)) {
+        if (!return_item(transaction->data[2], item_key)) {
             std::cout << "Item cannot be returned: "
                       << transaction->data << std::endl;
             return false;

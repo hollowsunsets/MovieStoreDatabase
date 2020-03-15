@@ -68,9 +68,10 @@ std::string ComedyMovie::data_to_key(std::istream& data_ss) {
     // std::istringstream data_ss(data);
     std::string title;
     std::getline(data_ss, title, ',');
-    std::ostringstream key(title);
+    std::ostringstream key("");
     int year;
     data_ss >> year;
+    key << title;
     key << year;
     return key.str();
 }
@@ -165,7 +166,9 @@ std::string ClassicMovie::data_to_key(std::istream& data_ss) {
     data_ss >> year;
     data_ss.ignore(1, ' ');
     std::getline(data_ss, major_actor, ',');
-    
+    // strip a strange \n...
+    major_actor.erase(major_actor.length() - 1);
+
     std::ostringstream key("");
     key << std::setfill('0') << std::setw(4) << year;
     key << std::setw(2) << month;

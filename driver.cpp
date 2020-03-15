@@ -222,7 +222,7 @@ void test_movie() {
 void test_itemfactory() {
     cout << "Testing Item, Movie subclasses and ItemFactory..." << endl;
     Item* i = ItemFactory::create_item(
-        "C, 4, ZUN Soft, Mystic Square, Alice Margatroid 12 1998");
+        "C, 4, ZUN Soft, Mystic Square, Alice Margatroid 12 1998\n");
 
     cout << "\tItemFactory: Movie creation (string arg)" << endl;
     assert(i != NULL);
@@ -252,15 +252,15 @@ void test_itemfactory() {
 
     cout << "\tItemFactory rejects bad data on key request:" << endl;
     std::cerr << "\t\t";
-    assert(ItemFactory::item_data_to_key("D Y 2 1971 Ruth Gordon") == "");
+    assert(ItemFactory::item_data_to_key("D Y 2 1971 Ruth Gordon\n") == "");
 
     cout << "\tItemFactory correctly transforms classic data to key:" << endl;
-    cout << "\t\t" << ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid") << endl;
-    assert(ItemFactory::item_data_to_key("D C 12 1998 Alice Margatroid")
+    cout << "\t\t" << ItemFactory::item_data_to_key("D C 12 1998 Alice Margatroid\n") << endl;
+    assert(ItemFactory::item_data_to_key("D C 12 1998 Alice Margatroid\n")
            == i->get_key());
 
     cout << "\tItemFactory correctly transforms drama data to key:" << endl;
-    cout << "\t\t" << ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,") << endl;
+    cout << "\t\t" << ItemFactory::item_data_to_key("D D TSA, Embodiment of Scarlet Devil,") << endl;
     assert(ItemFactory::item_data_to_key("D D TSA, Embodiment of Scarlet Devil,")
            == i2->get_key());
     
