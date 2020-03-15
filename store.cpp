@@ -11,6 +11,7 @@
 #include "store.h"
 #include "customer.h"
 #include "customertable.h"
+#include "itemfactory.h"
 #include "transactionfactory.h"
 #include "transaction.h"
 
@@ -105,7 +106,7 @@ Item* Store::get_item(char typecode, const std::string& key) {
 }
 
 
-bool Store::execute_transaction(Transaction &) {
+bool Store::execute_transaction(Transaction* ) {
 
 }
 

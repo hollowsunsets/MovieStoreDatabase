@@ -24,7 +24,7 @@ public:
     void add_item(Item*);
 
     // Executes the given transaction
-    bool execute_transaction(Transaction&);
+    bool execute_transaction(Transaction*);
     // Records that the given item is borrowed
     bool borrow_item(const std::string&);
     // Records that the given item has been returned
