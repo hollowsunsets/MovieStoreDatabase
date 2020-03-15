@@ -42,7 +42,6 @@ bool Store::read_inventory(const std::string& filename) {
         std::cout << "File " << filename << " could not be opened." << std::endl;
         return false;
     }
-<<<<<<< HEAD
 
     std::string line;
     Item* item;
@@ -57,13 +56,6 @@ bool Store::read_inventory(const std::string& filename) {
 
     infile.close();
     return true;
-=======
-    std::string line;
-    while (std::getline(infile, line)) {
-        std::cout << line << std::endl;
-        Item* new_item = ItemFactory::create_item(line);
-    }
->>>>>>> 7c5ca32c12315ad18497447e3c3168d6474b2691
 }
 
 /* read_customers: Builds a CustomerTable from the contents of
