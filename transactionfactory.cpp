@@ -10,7 +10,6 @@
 Transaction* TransactionFactory::create_transaction(const std::string& s) {
     char typecode = s.substr(0, s.find(" ")).c_str()[0];
     std::string transaction_data = s.substr(s.find(" ") + 1);
-    std::cout << transaction_data << std::endl;
     switch (typecode) {
         case 'B':
             return BorrowTransaction::create_transaction(transaction_data);

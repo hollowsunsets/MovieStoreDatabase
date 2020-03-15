@@ -22,7 +22,10 @@
 //
 class Transaction {
     friend std::ostream& operator<<(std::ostream& out, Transaction* t) {
-        out << t->transaction_type << " " << t->customer_id << " " << t->data;
+        out << t->transaction_type;
+        if (t->transaction_type != 'I'){
+            out << " " << t->customer_id << " " << t->data;
+        }
         return out;
     }
 public:
@@ -72,7 +75,7 @@ protected:
  */
 class HistoryTransaction : public Transaction {
 public:
-    HistoryTransaction(int character_id) : Transaction('H', character_id, "") {}
+    HistoryTransaction(int character_id) : Transaction('H', character_id, "") { }
     static HistoryTransaction* create_transaction(const std::string& s);
 protected:
     int character_id;
@@ -88,7 +91,6 @@ public:
     static InventoryTransaction* create_transaction();
 };
 
-static std::vector<std::string> &split(const std::string &s, char delim,
-                                       std::vector<std::string>& elems);
+std::vector<std::string> &split(const std::string &s, char delim,  std::vector<std::string>& elems);
 
 #endif // TRANSACTION_H

@@ -58,7 +58,8 @@ void test_customer() {
     assert(s1.str() == "Customer 1001, Reimu Hakurei history: "
                        "[ B 1001 D C 9 1938 Katherine Hepburn | "
                        "R 1001 D C 9 1938 Katherine Hepburn ]\n");
-
+    delete t;
+    delete t2;
     cout << "Customer tests pass!" << endl;
 }
 
@@ -275,7 +276,51 @@ void test_itemfactory() {
 }
 
 void test_transaction() {
+    cout << "Testing TransactionFactory, Transaction class and subclasses ... " << endl;
+    stringstream s1;
+    stringstream s2;
+    cout << "\tTest that Transaction creates Transactions of the appropriate subclass" << endl;
+    Transaction* borrow_t = TransactionFactory::create_transaction("B 1234 D D Steven Spielberg, Schindler's List,");
+    assert(borrow_t->get_transaction_type() == 'B');
+    cout << "\t\t" << borrow_t << endl;
+    s1 << borrow_t;
+    s2 << "B 1234 D D Steven Spielberg, Schindler's List,";
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
 
+    Transaction* return_t = TransactionFactory::create_transaction("R 1234 D C 9 1938 Katherine Hepburn");
+    assert(return_t->get_transaction_type() == 'R');
+    cout << "\t\t" << return_t << endl;
+    s1 << return_t;
+    s2 << "R 1234 D C 9 1938 Katherine Hepburn";
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    Transaction* inventory_t = TransactionFactory::create_transaction("I");
+    assert(inventory_t->get_transaction_type() == 'I');
+    cout << "\t\t" << inventory_t << endl;
+    s1 << inventory_t;
+    s2 << "I";
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    Transaction* history_t = TransactionFactory::create_transaction("H 1234");
+    assert(history_t->get_transaction_type() == 'H');
+    s1 << history_t;
+    s2 << "H 1234 ";
+    cout << "\t\tActual: \"" << history_t << "\"" << endl;
+    cout << "\t\tExpected: \"" << s2.str() << "\"" << endl;
+
+    assert(s1.str() == s2.str());
+    s1.str("");
+    s2.str("");
+
+    cout << "\tTest that Transaction with invalid type is returned as NULL" << endl;
+    Transaction* invalid_t = TransactionFactory::create_transaction("X 1234 Z C 9 1938 Katherine Hepburn");
+    assert(invalid_t == NULL);
 }
 
 int main() {
