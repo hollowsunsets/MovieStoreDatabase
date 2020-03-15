@@ -48,6 +48,12 @@ Customer::Customer(const Customer &c) {
   this->last_name = c.last_name;
 }
 
+Customer::~Customer() {
+    while (!transaction_history.empty()) {
+        transaction_history.pop_front();
+    }
+}
+
 // get customer's id
 // preconditions: none
 // postconditions: none

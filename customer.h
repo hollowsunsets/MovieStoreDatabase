@@ -24,6 +24,7 @@ class Customer {
   
   Customer(int id, const std::string first_name, const std::string last_name);
   Customer(const Customer& c);
+  ~Customer();
 
   // record a transaction to the customer's history 
   bool record_transaction(Transaction* t);

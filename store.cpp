@@ -95,7 +95,7 @@ bool Store::read_commands(const std::string& filename) {
         if (transaction != NULL) {
             valid &= execute_transaction(transaction);
             // this may not be correct: don't customers store them?
-            delete transaction;
+            // delete transaction;
         } else {
             //valid = false;
         }
