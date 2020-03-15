@@ -59,26 +59,53 @@ int Customer::get_id() const {
  * Preconditions: The given Transaction must have the same ID as this Customer.
  * Postconditions: Transaction history should print in reverse chronological order.
  */
-bool Customer::record_transaction(const Transaction& t) {
-  if (t.customer_id != this->id) {
+bool Customer::record_transaction(Transaction* t) {
+  if (t->customer_id != this->id) {
     return false;
   }
   transaction_history.push_back(t);
   return true;
 }
 
+// the customer only cares about recording that the customer has a copy
+// it does not take care of e.g. stock handling, that happens elsewhere
+// preconditions: item_key is matches a key provided by get_key()
+// postconditions: item_key is added to the borrows list for this customer
+bool Customer::borrow_item(const std::string& item_key) {
+    borrows.push_back(item_key);
+    return true;
+}
+
+// the customer only cares about removing the item
+// from the customer's borrows list, it does not take care of e.g. stock handling
+// preconditions: item_key matches a key provided by get_key()
+// postconditions: if true: borrows list contains one less instance of item_key
+//                 if false: no effect, item was not borrowed
+bool Customer::return_item(const std::string& item_key) {
+    for (std::vector<std::string>::iterator it = borrows.begin();
+         it != borrows.end(); ++it) {
+        if (*it == item_key) {
+            borrows.erase(it);
+            return true;
+        }
+    }
+    // item was not borrowed
+    return false;
+}
+
 /* display_history: Prints the Customer's history in reverse chronological order.
  * Preconditions: N/A
  * Postconditions: N/A
  */
+
 void Customer::display_history(std::ostream& out) const {
-  std::deque<Transaction>::const_iterator it = transaction_history.begin();
+  std::deque<Transaction*>::const_iterator it = transaction_history.begin();
   out << " history: [";
   if (it != transaction_history.end()) {
-      out << " " << *it++ << " ";
+      out << " " << (*it++) << " ";
   }
   while (it != transaction_history.end()) {
-      out << "| " << *it++ << " ";
+      out << "| " << (*it++) << " ";
   }
   out << "]"  << std::endl;
 }
