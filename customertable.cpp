@@ -143,12 +143,13 @@ Customer* CustomerTable::retrieve(int id) {
            customer_table[cluster_index] != NULL) {
 
         if (customer_table[cluster_index]->get_id() == id) {
-            return *customer_table[cluster_index];
+            return customer_table[cluster_index];
         }
         m = probe_size(++jumps);
         cluster_index = (index + m) & (size - 1);
     }
     return NULL;
+}
 
 /* display_table: Prints an ASCII representation of the CustomerTable.
  * Precondition:  N/A

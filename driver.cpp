@@ -97,7 +97,7 @@ void test_customer_table() {
     Customer c4(1003, "Suzaku", "Kururugi");
     ct.insert(c4);
     s1 << c4;
-    s2 << ct.retrieve(1003);
+    s2 << *ct.retrieve(1003);
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -233,8 +233,7 @@ void test_itemfactory() {
 
 int main() {
     test_customer();
-    /* test_store(); Commented out for now since problems seem to originate
-                     from Store's nonexistent destructor. */
+    test_store();
     test_customer_table();
     test_movie();
     test_itemfactory();
