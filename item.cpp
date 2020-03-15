@@ -1,3 +1,14 @@
+// --------------------------- Item.h ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification: 
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the Item class
+// ----------------------------------------------------------------------------
+
+
 #include "item.h"
 
 // ALL of these need to be moved to movie...
@@ -12,14 +23,6 @@ Item::Item(int stock) {
 // nothing to do; probably needed to avoid
 // vtable errors
 Item::~Item() {}
-
-// getter for type
-// preconditions: none
-// postconditions: none
-// char Item::get_typecode() const {
-//     return this->typecode;
-// }
-
 
 bool operator<(const Item &m, const Item &o) {
     return m.get_typecode() < o.get_typecode()
