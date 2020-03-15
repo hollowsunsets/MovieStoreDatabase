@@ -1,3 +1,13 @@
+// --------------------------- driver.cpp ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification: 
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functional requirements of the MovieStoreDatabase.
+// ----------------------------------------------------------------------------
+
 #include <assert.h>
 #include <iostream>
 #include <sstream>
@@ -22,8 +32,8 @@ void test_customer() {
     ostringstream s1;
     ostringstream s2;
     s1 << c;
-    cout << "\t\t" << c;
-    assert(s1.str() == "Customer 1001, Reimu Hakurei history: []\n");
+    cout << "\t\t" << c << endl;
+    assert(s1.str() == "Customer 1001, Reimu Hakurei history: []");
     s1.str("");
 
     bool exception_thrown = false;
@@ -39,8 +49,8 @@ void test_customer() {
     Customer c2(c1);
     s1 << c1;
     s2 << c2;
-    cout << "\t\t" << c1;
-    cout << "\t\t" << c2;
+    cout << "\t\t" << c1 << endl;
+    cout << "\t\t" << c2 << endl;
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -54,10 +64,10 @@ void test_customer() {
 
     cout << "\tTesting Customer display_history..." << endl;
     s1 << c;
-    cout << "\t\t" << c;
+    cout << "\t\t" << c << endl;
     assert(s1.str() == "Customer 1001, Reimu Hakurei history: "
                        "[ B 1001 D C 9 1938 Katherine Hepburn | "
-                       "R 1001 D C 9 1938 Katherine Hepburn ]\n");
+                       "R 1001 D C 9 1938 Katherine Hepburn ]");
 
     cout << "\tTesting Customer borrow and return..." << endl;
     //string format doesn't matter
@@ -67,7 +77,6 @@ void test_customer() {
     assert(!c.return_item("Eastern Mystical Love Consultation"));
     cout << "\t\tReturning Dichromatic Lotus Butterfly" << endl;
     assert(c.return_item("Dichromatic Lotus Butterfly"));
-
     delete t;
     delete t2;
     cout << "Customer tests pass!" << endl;
@@ -76,17 +85,17 @@ void test_customer() {
 void test_store() {
     cout << "Testing Store class..." << endl;
     Store s;
-    cout << "Testing Store.read_inventory()..." << endl;
+    cout << "\tTesting Store.read_inventory()..." << endl;
     assert(s.read_inventory("data/data4movies.txt"));
-    cout << "Displaying Store inventory..." << endl;
+    cout << "\t\tDisplaying Store inventory..." << endl;
+    cout << "\t\t" << endl;
     s.display_inventory();
-    cout << "Testing Store.read_customers()..." << endl;
+    cout << "\tTesting Store.read_customers()..." << endl;
     assert(s.read_customers("data/data4customers.txt"));
 
-    cout << "Testing Store.read_commands()..." << endl;
+    cout << "\tTesting Store.read_commands()..." << endl;
     assert(s.read_customers("data/data4commands.txt"));
 
-    
     cout << "Store tests pass!" << endl;
 }
 
@@ -115,7 +124,6 @@ void test_customer_table() {
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
-    cout << "!!!!!!!!!!!!!!!!!!!!1MEMORY LEAK BEGINS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
     cout << "\tTesting Customer table resizing..." << endl;
     Customer c4(1003, "Suzaku", "Kururugi");
     ct.insert(c4);
@@ -131,10 +139,8 @@ void test_customer_table() {
     std::string line;
     int size = 0;
 
-
-    while (std::getline(infile, line) && size < 1) {
-
-        std::cout << "\t\tInserting " << line << std::endl;
+    while (std::getline(infile, line)) {
+        std::cout << "\t\t" << line << std::endl;
         std::istringstream stream(line);
         int customer_id;
         std::string first_name, last_name;
@@ -146,7 +152,6 @@ void test_customer_table() {
         assert(s1.str() == s2.str());
         s1.str("");
         s2.str("");
-        size++;
     }
 
     cout << "\tTesting Customer table retrieving nonexistent key returns null." << endl;
@@ -161,34 +166,33 @@ void test_customer_table() {
 }
 
 void test_movie() {
-    std::stringstream ss;
+    cout << "Testing Movie class..." << std::endl;
+    stringstream ss;
     ss.str("0, Aya Shameimaru, Double Spoiler, 2010");
     ComedyMovie* cm = new ComedyMovie(ss);
     ss.clear();
     ss.str("0, Aya Shameimaru, Shoot the Bullet, 2005");
     ComedyMovie* cm2 = new ComedyMovie(ss);
     // item methods
-    //    cout << cm->get_typecode() << std::endl;
-    // assert(cm->get_typecode() == 'F');
     assert(!cm->remove_stock(1));
     assert(!cm->add_stock(-10));
     assert(cm->add_stock(10));
 
     // comedy sorting key (title, year)
-    cout << "ComedyMovie sorting keys:" << std::endl;
-    cout << '\t' << cm->get_key() << std::endl;
-    cout << '\t' << cm2->get_key() << std::endl;
-    assert(cm->get_key().find("Double Spoiler2010") != std::string::npos);
+    cout << "\tComedyMovie sorting keys:" << std::endl;
+    cout << "\t\t" << cm->get_key() << std::endl;
+    cout << "\t\t" << cm2->get_key() << std::endl;
+    assert(cm->get_key().find("Double Spoiler2010") != string::npos);
     assert(*cm < *cm2);
 
     ss.clear();
     ss.str("15, Hata no Kokoro, Hopeless Masquerade, 2013");
     DramaMovie* dm = new DramaMovie(ss);
     // drama sorting key (director, title)
-    cout << "DramaMovie sorting keys:" << std::endl;
-    cout << '\t' << dm->get_key() << std::endl;
-    assert(dm->get_key().find("Hata no Kokoro") != std::string::npos);
-    assert(dm->get_key().find("Hopeless Masquerade") != std::string::npos);
+    cout << "\tDramaMovie sorting keys:" << std::endl;
+    cout << "\t\t" << dm->get_key() << std::endl;
+    assert(dm->get_key().find("Hata no Kokoro") != string::npos);
+    assert(dm->get_key().find("Hopeless Masquerade") != string::npos);
 
     ss.clear();
     ss.str("4, ZUN Soft, Lotus Land Story, Yuuka Kazami 8 1998");
@@ -197,9 +201,9 @@ void test_movie() {
     ss.str("4, ZUN Soft, Mystic Square, Yuuka Kazami 12 1998");
     ClassicMovie* clm2 = new ClassicMovie(ss);
     // classic sorting key (release date, then major actor)
-    cout << "ClassicMovie sorting keys:" << std::endl;
-    cout << '\t' << clm->get_key() << std::endl;
-    cout << '\t' << clm2->get_key() << std::endl;
+    cout << "\tClassicMovie sorting keys:" << std::endl;
+    cout << "\t\t" << clm->get_key() << std::endl;
+    cout << "\t\t" << clm2->get_key() << std::endl;
     assert(clm->get_key().find("199808") != std::string::npos);
     assert(clm->get_key().find("Yuuka Kazami") != std::string::npos);
     assert(*clm < *clm2);
@@ -216,45 +220,47 @@ void test_movie() {
 }
 
 void test_itemfactory() {
+    cout << "Testing Item, Movie subclasses and ItemFactory..." << endl;
     Item* i = ItemFactory::create_item(
         "C, 4, ZUN Soft, Mystic Square, Alice Margatroid 12 1998");
 
-    cout << "ItemFactory: Movie creation (string arg)" << std::endl;
-    // make sure we actually got something
+    cout << "\tItemFactory: Movie creation (string arg)" << endl;
     assert(i != NULL);
-    // methods still work as expected as Item*?
-    cout << '\t' << i->get_key() << std::endl;
+    cout << "\t\t" << i->get_key() << endl;
     assert(i->get_typecode() == 'C');
-    assert(i->get_key().find("199812") != std::string::npos);
+    assert(i->get_key().find("199812") != string::npos);
 
-    // istream version, should just eat first line
-    cout << "ItemFactory: Movie creation (stream arg)" << std::endl;
+    cout << "\tItemFactory: Movie creation (stream arg)" << std::endl;
     stringstream ss("D, 6, TSA, Embodiment of Scarlet Devil, 2002\nD, 7, TSA, Perfect Cherry Blossom, 2003\n");
     Item* i2 = ItemFactory::create_item(ss);
     assert(i2 != NULL);
     // correct movie construction?
-    cout << '\t' << i2->get_key() << std::endl;
-    assert(i2->get_key().find("Embodiment of Scarlet Devil") != std::string::npos);
-    assert(i2->get_key().find("Perfect Cherry Blossom") == std::string::npos);
+    cout << "\t\t" << i2->get_key() << std::endl;
+    assert(i2->get_key().find("Embodiment of Scarlet Devil") != string::npos);
+    assert(i2->get_key().find("Perfect Cherry Blossom") == string::npos);
 
-    cout << "ItemFactory doesn't destroy second entry:" << std::endl;
+    cout << "\tItemFactory doesn't destroy second entry:" << endl;
     // stream is in a good state?
-    cout << '\t' << ss.str() << std::endl;
+    cout << "\t\tD, 6, TSA, Embodiment of Scarlet Devil, 2002\n\t\tD, 7, TSA, Perfect Cherry Blossom, 2003\n" << endl;
     // i don't know if it's okay that the other string is still there...
-    assert(ss.str().find("D, 7, TSA, Perfect Cherry Blossom, 2003\n") != std::string::npos);
+    assert(ss.str().find("D, 7, TSA, Perfect Cherry Blossom, 2003\n") != string::npos);
 
-    cout << "ItemFactory fails on bad item typecode:" << std::endl;
+    cout << "\tItemFactory fails on bad item typecode:" << endl;
+    std::cerr << "\t\t";
     Item* i3 = ItemFactory::create_item("X, 0, junk data, junk data, 2020");
     assert(i3 == NULL);
 
-    cout << "ItemFactory rejects bad data on key request:" << endl;
+    cout << "\tItemFactory rejects bad data on key request:" << endl;
+    std::cerr << "\t\t";
     assert(ItemFactory::item_data_to_key("Y 2 1971 Ruth Gordon") == "");
-    cout << "ItemFactory correctly transforms classic data to key:" << endl;
-    cout << "\t" << ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid") << endl;
+
+    cout << "\tItemFactory correctly transforms classic data to key:" << endl;
+    cout << "\t\t" << ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid") << endl;
     assert(ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid")
            == i->get_key());
-    cout << "ItemFactory correctly transforms drama data to key:" << endl;
-    cout << "\t" << ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,") << endl;
+
+    cout << "\tItemFactory correctly transforms drama data to key:" << endl;
+    cout << "\t\t" << ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,") << endl;
     assert(ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,")
            == i2->get_key());
     
@@ -269,7 +275,7 @@ void test_transaction() {
     cout << "Testing TransactionFactory, Transaction class and subclasses ... " << endl;
     stringstream s1;
     stringstream s2;
-    cout << "\tTest that Transaction creates Transactions of the appropriate subclass" << endl;
+    cout << "\tTest that TransactionFactory creates Transactions of the appropriate subclass" << endl;
     Transaction* borrow_t = TransactionFactory::create_transaction("B 1234 D D Steven Spielberg, Schindler's List,");
     assert(borrow_t->get_transaction_type() == 'B');
     cout << "\t\t" << borrow_t << endl;
@@ -301,14 +307,14 @@ void test_transaction() {
     assert(history_t->get_transaction_type() == 'H');
     s1 << history_t;
     s2 << "H 1234 ";
-    cout << "\t\tActual: \"" << history_t << "\"" << endl;
-    cout << "\t\tExpected: \"" << s2.str() << "\"" << endl;
+    cout << "\t\t" << history_t << endl;
 
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
 
-    cout << "\tTest that Transaction with invalid type is returned as NULL" << endl;
+    cout << "\tTest that TransactionFactory returns NULL when given invalid type" << endl;
+    std::cerr << "\t\t";
     Transaction* invalid_t = TransactionFactory::create_transaction("X 1234 Z C 9 1938 Katherine Hepburn");
     assert(invalid_t == NULL);
 }

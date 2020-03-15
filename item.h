@@ -1,3 +1,14 @@
+// ---------------------------item.h ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification: 
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Defining the functions of the Item class
+// ----------------------------------------------------------------------------
+
+
 #ifndef ITEM_H
 #define ITEM_H
 
@@ -18,12 +29,6 @@ class Item {
     
   // get comparison key 
   virtual std::string get_key() const = 0;
-
-  
-  // factory interface,
-  // all concrete subclasses must implement:
-  //static Item* create_item(std::istream& s);
-  //static Item* data_to_key(std::string& data);
     
   virtual char get_typecode() const = 0;
 
@@ -42,11 +47,6 @@ class Item {
  protected:
   // amount of the item in stock
   int stock;
-
-  // // item subgroup type
-  // // e.g. movie genre, device manufacturer
-  // // must be in [A..~] (ASCII 65-126)
-  // const char typecode;
     
   // derived classes have additional data fields
 };

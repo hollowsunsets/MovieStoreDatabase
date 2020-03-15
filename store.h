@@ -1,3 +1,13 @@
+// ---------------------------- Store.h ---------------------------------
+// Isabel Giang, Yttria Aniseia
+// CSS 343 C: Data Structures and Algorithms II
+// Creation Date: February 23, 2020
+// Date of Last Modification: 
+// Assignment 4: Movie Store Database
+// ----------------------------------------------------------------------------
+// Purpose: Declaring the functions of the Store class
+// ----------------------------------------------------------------------------
+
 #ifndef STORE_H
 #define STORE_H
 
