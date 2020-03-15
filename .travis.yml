@@ -1,5 +1,6 @@
 install:
     - sudo apt-get install -y gdb
+    - sudo apt-get install -y valgrind
 
 before_script:
     - ulimit -c unlimited -S
@@ -7,10 +8,10 @@ before_script:
 after_failure:
     - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # Find core dump for failed build
     - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
-    - valgrind ./driver
 language: cpp
 compiler: gcc
 os:       linux
 script:
     - make
     - ./driver
+
