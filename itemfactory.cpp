@@ -21,13 +21,10 @@ Item* ItemFactory::create_item(const std::string& s) {
     switch (typecode) {
     case 'F':
         return ComedyMovie::create_item(ss);
-        break;
     case 'D':
         return DramaMovie::create_item(ss);
-        break;
     case 'C':
         return ClassicMovie::create_item(ss);
-        break;
     default:
         std::cerr << "Invalid Video Code: " << typecode << std::endl;
         return NULL;

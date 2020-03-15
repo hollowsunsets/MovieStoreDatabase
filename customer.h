@@ -23,7 +23,8 @@ class Customer {
   
   Customer(int id, const std::string first_name, const std::string last_name);
   Customer(const Customer& c);
-  bool record_transaction(const Transaction& t);
+  ~Customer();
+  bool record_transaction(Transaction* t);
   void display_history(std::ostream& out = std::cout) const;
   int get_id() const;
 
@@ -31,7 +32,7 @@ class Customer {
   int id;
   std::string first_name;
   std::string last_name;
-  std::deque<Transaction> transaction_history;
+  std::deque<Transaction*> transaction_history;
 };
 
 #endif // CUSTOMER_H
