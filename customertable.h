@@ -27,9 +27,11 @@ public:
     // record a customer's Transaction, by customer id
     void record_transaction(int id, Transaction* transaction);
     // retrieve the customer data, by customer id
-    Customer& retrieve(int id);
+    Customer* retrieve(int id);
     // display table entries
     void display_table() const;
+
+    void display_histories() const;
 
 protected:
     // calculate hash location for a given id (>=0 & <=9999)

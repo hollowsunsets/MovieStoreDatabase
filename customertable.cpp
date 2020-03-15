@@ -59,8 +59,9 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
 
     int cluster_index = (index + m) & (size - 1);
 
-    while (cluster_index >= 0 && cluster_index < size && customers[cluster_index] != NULL &&
-           customers[cluster_index]->get_id() != c.get_id()) {
+    while (cluster_index >= 0 && cluster_index < size
+           && customers[cluster_index] != NULL
+           && customers[cluster_index]->get_id() != c.get_id()) {
         m = probe_size(++jumps);
         cluster_index = (index + m) & (size - 1);
     }
@@ -113,15 +114,15 @@ bool CustomerTable::remove(int id) {
 // Precondition: ID must exist in the Customer Table.
 // Postcondition: N/A
 void CustomerTable::record_transaction(int id, Transaction* transaction) {
-    Customer c = this->retrieve(id);
-    c.record_transaction(transaction);
+    Customer* c = this->retrieve(id);
+    c->record_transaction(transaction);
 }
 
 // retrieve: Retrieves the Customer that corresponds with the given
 //           ID contained in the CustomerTable.
 // Precondition: ID must exist in the Customer Table.
 // Postcondition: N/A
-Customer& CustomerTable::retrieve(int id) {
+Customer* CustomerTable::retrieve(int id) {
     int index = hash(id);
     int jumps = 0, m = 0;
     int cluster_index = (index + m) & (size - 1);
@@ -130,13 +131,12 @@ Customer& CustomerTable::retrieve(int id) {
            customer_table[cluster_index] != NULL) {
 
         if (customer_table[cluster_index]->get_id() == id) {
-            return *customer_table[cluster_index];
+            return customer_table[cluster_index];
         }
         m = probe_size(++jumps);
         cluster_index = (index + m) & (size - 1);
     }
-    std::stringstream error_message;
-    throw std::invalid_argument(error_message.str());
+    return NULL;
 }
 
 // display_table: Prints an ASCII representation of the CustomerTable.
@@ -158,6 +158,14 @@ void CustomerTable::display_table() const {
         }
     }
     std::cout << "}" << std::endl;
+}
+
+void CustomerTable::display_histories() const {
+    for (int i = 0; i < size; ++i) {
+        if (customer_table[i]) {
+            customer_table[i]->display_history();
+        }
+    }
 }
 
 // hash: Hash function based on Pearson hashing to

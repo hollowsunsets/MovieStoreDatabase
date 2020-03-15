@@ -27,6 +27,8 @@ class Movie : public Item {
     Movie(int stock, const std::string &director,
           const std::string &title, int year);
 
+    virtual void print(std::ostream& out) const;
+    
     virtual char get_typecode() const = 0;
         
     // implemented suitably in Item
@@ -43,7 +45,7 @@ class Movie : public Item {
 class ComedyMovie : public Movie {
   public:
     ComedyMovie(std::istream& s) : Movie(s){};
-
+    
     char get_typecode() const { return 'F'; }
     
     // Comedy Movies are sorted by Title, then Year
@@ -81,6 +83,8 @@ class ClassicMovie : public Movie {
     ClassicMovie(int stock, const std::string &director,
                  const std::string &title, const std::string &major_actor,
                  int month, int year);
+
+    void print(std::ostream& out) const;
     
     char get_typecode() const { return 'C'; }
 

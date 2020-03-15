@@ -18,7 +18,7 @@
 #include <string>
 
 class Store {
-    static const int INVENTORY_SIZE = '~' - 'a';
+    static const int INVENTORY_SIZE = '~' - 'A';
 public:
     Store();
     ~Store();
@@ -34,18 +34,21 @@ public:
     void add_item(Item*);
 
     // Executes the given transaction
-    bool execute_transaction(Transaction&);
+    bool execute_transaction(Transaction*);
     // Records that the given item is borrowed
-    bool borrow_item(const std::string&);
+    bool borrow_item(char typecode, const std::string&);
     // Records that the given item has been returned
-    bool return_item(const std::string&);
+    bool return_item(char typecode, const std::string&);
     // Prints the inventory of the Store
     void display_inventory();
     // Prints the transaction history of all Customers of the Store
-    void display_history();
+    bool display_history();
+    // Prints the transaction history on one Customer specified
+    bool display_history(int id);
 private:
-  std::map<std::string, Item*> inventory[INVENTORY_SIZE];
-  CustomerTable customer_table;
+    Item* get_item(char typecode, const std::string& key);
+    CustomerTable* customer_table;
+    std::map<std::string, Item*> inventory[INVENTORY_SIZE];
 };
 
 #endif // STORE_H

@@ -85,8 +85,16 @@ void test_customer() {
 void test_store() {
     cout << "Testing Store class..." << endl;
     Store s;
-    cout << "Testing Store.read_customers()..." << endl;
+    cout << "\tTesting Store.read_inventory()..." << endl;
+    assert(s.read_inventory("data/data4movies.txt"));
+    cout << "\t\tDisplaying Store inventory..." << endl;
+    cout << "\t\t" << endl;
+    s.display_inventory();
+    cout << "\tTesting Store.read_customers()..." << endl;
     assert(s.read_customers("data/data4customers.txt"));
+
+    cout << "\tTesting Store.read_commands()..." << endl;
+    assert(s.read_customers("data/data4commands.txt"));
 
     cout << "Store tests pass!" << endl;
 }
@@ -103,7 +111,7 @@ void test_customer_table() {
     std::stringstream s1;
     std::stringstream s2;
     s1 << c;
-    s2 << ct.retrieve(1001);
+    s2 << *(ct.retrieve(1001));
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -112,7 +120,7 @@ void test_customer_table() {
     Customer c3(1001, "Lelouch", "Lamperouge");
     ct.insert(c3);
     s1 << c3;
-    s2 << ct.retrieve(1001);
+    s2 << *(ct.retrieve(1001));
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -120,7 +128,7 @@ void test_customer_table() {
     Customer c4(1003, "Suzaku", "Kururugi");
     ct.insert(c4);
     s1 << c4;
-    s2 << ct.retrieve(1003);
+    s2 << *ct.retrieve(1003);
     assert(s1.str() == s2.str());
     s1.str("");
     s2.str("");
@@ -140,45 +148,18 @@ void test_customer_table() {
         Customer new_customer(customer_id, first_name, last_name);
         ct.insert(Customer(customer_id, first_name, last_name));
         s1 << new_customer;
-        s2 << ct.retrieve(customer_id);
+        s2 << *(ct.retrieve(customer_id));
         assert(s1.str() == s2.str());
         s1.str("");
         s2.str("");
     }
 
+    cout << "\tTesting Customer table retrieving nonexistent key returns null." << endl;
+    assert(ct.retrieve(5555) == NULL);
+
     cout << "\tTesting Customer table simple removal..." << endl;
-    assert(ct.remove(1001));
-    bool exception_thrown2 = false;
-    try {
-        ct.retrieve(1001);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
-        exception_thrown2 = true;
-    }
-
-    assert(exception_thrown2);
-
-    assert(ct.remove(1002));
-    bool exception_thrown3 = false;
-    try {
-        ct.retrieve(1002);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve id that should have been removed" << endl;
-        exception_thrown3 = true;
-    }
-    assert(exception_thrown3);
-
-
-
-    cout << "\tTesting Customer table retrieving nonexistent key throws an exception..." << endl;
-    bool exception_thrown = false;
-    try {
-        ct.retrieve(5555);
-    } catch (...) {
-        cout << "\t\tException thrown when trying to retrieve nonexistent id" << endl;
-        exception_thrown = true;
-    }
-    assert(exception_thrown);
+    ct.remove(1001);
+    assert(ct.retrieve(1001) == NULL);
 
     cout << "CustomerTable tests pass!" << endl;
 
@@ -340,8 +321,7 @@ void test_transaction() {
 
 int main() {
     test_customer();
-    /* test_store(); Commented out for now since problems seem to originate
-                     from Store's nonexistent destructor. */
+    test_store();
     test_customer_table();
     test_movie();
     test_itemfactory();

@@ -9,26 +9,49 @@
 // ----------------------------------------------------------------------------
 
 #include "store.h"
+#include "item.h"
+#include "itemfactory.h"
 #include "customer.h"
 #include "customertable.h"
-#include "transactionfactory.h"
+#include "itemfactory.h"
 #include "transaction.h"
+#include "transactionfactory.h"
 
-#include <string>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <exception>
+#include <string>
 
 Store::Store() {
-    customer_table = CustomerTable();
+    customer_table = new CustomerTable();
 }
 
 Store::~Store() {
+    delete customer_table;
 }
 
-bool Store::read_inventory(const std::string& filename) {
 
+bool Store::read_inventory(const std::string& filename) {
+    std::ifstream infile(filename.c_str());
+    if (!infile) {
+        std::cout << "File " << filename << " could not be opened." << std::endl;
+        return false;
+    }
+
+    std::string line;
+    Item* item;
+    while (std::getline(infile, line)) {
+        item = ItemFactory::create_item(line);
+        if (item == NULL) {
+            std::cout << "Ignoring invalid item: " << line << std::endl;
+        } else {
+            add_item(item);
+        }
+    }
+
+    infile.close();
+    return true;
 }
 
 /* read_customers: Builds a CustomerTable from the contents of
@@ -50,9 +73,12 @@ bool Store::read_customers(const std::string& filename) {
         int customer_id;
         std::string first_name, last_name;
         stream >> customer_id >> first_name >> last_name;
-        customer_table.insert(Customer(customer_id, first_name, last_name));
+        Customer c = Customer(customer_id, first_name, last_name);
+        customer_table->insert(c);
     }
-    customer_table.display_table();
+    customer_table->display_table();
+
+    infile.close();
     return true;
 }
 
@@ -62,35 +88,152 @@ bool Store::read_commands(const std::string& filename) {
         std::cout << "File " << filename << " could not be opened." << std::endl;
         return false;
     }
+    bool valid = true;
     std::string line;
     while (std::getline(infile, line)) {
+        Transaction* transaction = TransactionFactory::create_transaction(line);
+        if (transaction != NULL) {
+            valid &= execute_transaction(transaction);
+            // this may not be correct: don't customers store them?
+            delete transaction;
+        } else {
+            valid = false;
+        }
     }
-    return true;
+    infile.close();
+    return valid;
 }
 
-void Store::add_customer(Customer &) {
-
+// add a customer to the customer table
+// preconditions: N/A
+// postconditions: customer table's entry for customer.id == customer
+void Store::add_customer(Customer& customer) {
+    customer_table->insert(customer);
 }
 
-void Store::add_item(Item *) {
 
+void Store::add_item(Item* i) {
+    if (i == NULL) {
+        return;
+    }
+    inventory[i->get_typecode() - 'A'][i->get_key()] = i;
 }
 
-bool Store::execute_transaction(Transaction &) {
-
+Item* Store::get_item(char typecode, const std::string& key) {
+    std::map<std::string,Item*>::iterator itemq;
+    itemq = inventory[typecode - 'A'].find(key);
+    if (itemq != inventory[typecode - 'A'].end()) {
+        return itemq->second;
+    }
+    return NULL;
 }
 
-bool Store::borrow_item(const std::string &) {
 
+bool Store::execute_transaction(Transaction* transaction) {
+    std::string item_key;
+    Customer* customer;
+    switch (transaction->get_transaction_type()) {
+    case 'I':
+        display_inventory();
+        return true;
+    case 'H':
+        if(!display_history(transaction->customer_id)) {
+            std::cout << "Invalid transaction: " << transaction << std::endl;
+            return false;
+        }
+        return true;
+    case 'B':
+        item_key = ItemFactory::item_data_to_key(transaction->data);
+        std::cout << "borrow key: " << item_key << std::endl;
+        customer = customer_table->retrieve(transaction->customer_id);
+        if (!customer) {
+            std::cout << "Invalid customer ID: " <<
+                    transaction->customer_id << std::endl;
+            return false;
+        }
+        if(!borrow_item(transaction->data[0], item_key)) {
+            std::cout << "Not in stock: " << transaction->data << std::endl;
+            return false;
+        }
+        customer->borrow_item(item_key);
+        customer->record_transaction(transaction);
+        return true;
+    case 'R':
+        item_key = ItemFactory::item_data_to_key(transaction->data);
+        std::cout << "return key: " << item_key << std::endl;
+        customer = customer_table->retrieve(transaction->customer_id);
+        if (!customer) {
+            std::cout << "Invalid customer ID: " <<
+                    transaction->customer_id << std::endl;
+            return false;
+        }
+        if (!customer->return_item(item_key)) {
+            std::cout << "Item not borrowed: " << transaction->data << std::endl;
+            return false;
+        }
+        customer->record_transaction(transaction);
+        if (!return_item(transaction->data[0], item_key)) {
+            std::cout << "Item cannot be returned: "
+                      << transaction->data << std::endl;
+            return false;
+        }
+        
+        return true;
+    default:
+        return false;
+    }
 }
 
-bool Store::return_item(const std::string &) {
+bool Store::borrow_item(char typecode, const std::string& key) {
+    Item* item = get_item(typecode, key);
+    return item != NULL && item->remove_stock(1);
+}
 
+bool Store::return_item(char typecode, const std::string& key) {
+    Item* item = get_item(typecode, key);
+    // this should always be true in practice -- customer return acts as a guard
+    return item != NULL && item->add_stock(1);    
 }
 
 void Store::display_inventory() {
+    // this should really retrieve a list of item types from the factory
+    
+    for (std::map<std::string,Item*>::iterator it = inventory['F' - 'A'].begin();
+         it != inventory['F' - 'A'].end();
+         ++it) {
+        it->second->print(std::cout);
+        std::cout << std::endl;
+    }
+    
+    for (std::map<std::string,Item*>::iterator it = inventory['D' - 'A'].begin();
+         it != inventory['D' - 'A'].end();
+         ++it) {
+        it->second->print(std::cout);
+        std::cout << std::endl;
+    }
+
+    for (std::map<std::string,Item*>::iterator it = inventory['C' - 'A'].begin();
+         it != inventory['C' - 'A'].end();
+         ++it) {
+        it->second->print(std::cout);
+        std::cout << std::endl;
+    }
 }
 
-void Store::display_history() {
+// display all customer histories
+bool Store::display_history() {
+    customer_table->display_histories();
+    return true;
+}
 
+// display history of a given customer id
+bool Store::display_history(int id) {
+    Customer* c = customer_table->retrieve(id);
+    if (c) {
+        c->display_history();
+        return true;
+    }
+
+    std::cout << "Invalid customer ID: " << id;
+    return false;
 }

@@ -24,6 +24,8 @@ class Item {
   Item();
   Item(int stock);
   virtual ~Item();
+
+  virtual void print(std::ostream& out) const = 0;
     
   // get comparison key 
   virtual std::string get_key() const = 0;
