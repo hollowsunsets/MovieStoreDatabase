@@ -54,6 +54,16 @@ ComedyMovie* ComedyMovie::create_item(std::istream& s) {
     return new ComedyMovie(s);
 }
 
+std::string ComedyMovie::data_to_key(std::istream& data_ss) {
+    // std::istringstream data_ss(data);
+    std::string title;
+    std::getline(data_ss, title, ',');
+    std::ostringstream key(title);
+    int year;
+    data_ss >> year;
+    key << year;
+    return key.str();
+}
 
 //
 // Drama Movie
@@ -64,6 +74,16 @@ std::string DramaMovie::get_key() const {
 
 DramaMovie* DramaMovie::create_item(std::istream& s) {
     return new DramaMovie(s);
+}
+
+std::string DramaMovie::data_to_key(std::istream& data_ss) {
+    //    std::istringstream data_ss(data);
+    std::string director;
+    std::string title;
+    std::getline(data_ss, director, ',');
+    data_ss.ignore(1, ' ');
+    std::getline(data_ss, title, ',');
+    return director + title;
 }
 
 //
@@ -123,4 +143,22 @@ ClassicMovie::ClassicMovie(int stock, const std::string &director,
 
 ClassicMovie* ClassicMovie::create_item(std::istream& s) {
     return new ClassicMovie(s);
+}
+
+std::string ClassicMovie::data_to_key(std::istream& data_ss) {
+    //    std::istringstream data_ss(data);
+    int month;
+    int year;
+    std::string major_actor;
+
+    data_ss >> month;
+    data_ss >> year;
+    data_ss.ignore(1, ' ');
+    std::getline(data_ss, major_actor, ',');
+    
+    std::ostringstream key("");
+    key << std::setfill('0') << std::setw(4) << year;
+    key << std::setw(2) << month;
+    key << major_actor;
+    return key.str();
 }

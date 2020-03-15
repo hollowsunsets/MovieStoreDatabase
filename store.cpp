@@ -13,6 +13,11 @@
 #include "itemfactory.h"
 #include "customer.h"
 #include "customertable.h"
+<<<<<<< HEAD
+=======
+#include "itemfactory.h"
+#include "transactionfactory.h"
+>>>>>>> 7c5ca32c12315ad18497447e3c3168d6474b2691
 #include "transaction.h"
 #include "transactionfactory.h"
 
@@ -37,6 +42,7 @@ bool Store::read_inventory(const std::string& filename) {
         std::cout << "File " << filename << " could not be opened." << std::endl;
         return false;
     }
+<<<<<<< HEAD
 
     std::string line;
     Item* item;
@@ -51,6 +57,13 @@ bool Store::read_inventory(const std::string& filename) {
 
     infile.close();
     return true;
+=======
+    std::string line;
+    while (std::getline(infile, line)) {
+        std::cout << line << std::endl;
+        Item* new_item = ItemFactory::create_item(line);
+    }
+>>>>>>> 7c5ca32c12315ad18497447e3c3168d6474b2691
 }
 
 /* read_customers: Builds a CustomerTable from the contents of
@@ -87,11 +100,19 @@ bool Store::read_commands(const std::string& filename) {
         std::cout << "File " << filename << " could not be opened." << std::endl;
         return false;
     }
+    bool valid_transactions = true;
     std::string line;
     while (std::getline(infile, line)) {
+        Transaction* new_transaction = TransactionFactory::create_transaction(line);
+        if (new_transaction != NULL) {
+            execute_transaction(new_transaction);
+            delete new_transaction;
+        } else {
+            valid_transactions = false;
+        }
     }
     infile.close();
-    return true;
+    return valid_transactions;
 }
 
 void Store::add_customer(Customer& customer) {
@@ -115,7 +136,7 @@ Item* Store::get_item(char typecode, const std::string& key) {
 }
 
 
-bool Store::execute_transaction(Transaction &) {
+bool Store::execute_transaction(Transaction* ) {
 
 }
 

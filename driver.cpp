@@ -242,6 +242,17 @@ void test_itemfactory() {
     cout << "ItemFactory fails on bad item typecode:" << std::endl;
     Item* i3 = ItemFactory::create_item("X, 0, junk data, junk data, 2020");
     assert(i3 == NULL);
+
+    cout << "ItemFactory rejects bad data on key request:" << endl;
+    assert(ItemFactory::item_data_to_key("Y 2 1971 Ruth Gordon") == "");
+    cout << "ItemFactory correctly transforms classic data to key:" << endl;
+    cout << "\t" << ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid") << endl;
+    assert(ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid")
+           == i->get_key());
+    cout << "ItemFactory correctly transforms drama data to key:" << endl;
+    cout << "\t" << ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,") << endl;
+    assert(ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,")
+           == i2->get_key());
     
     delete i;
     delete i2;

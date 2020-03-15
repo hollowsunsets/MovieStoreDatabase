@@ -19,10 +19,12 @@ class Item {
   // get comparison key 
   virtual std::string get_key() const = 0;
 
+  
   // factory interface,
   // all concrete subclasses must implement:
   //static Item* create_item(std::istream& s);
-
+  //static Item* data_to_key(std::string& data);
+    
   virtual char get_typecode() const = 0;
 
   // add the quantity d to the item's stock

@@ -42,14 +42,9 @@ class ComedyMovie : public Movie {
     std::string get_key() const;
 
     static ComedyMovie* create_item(std::istream& s);
-
-    // taken care of with get_key 
-    // virtual bool operator<(const Item&);
-    // virtual bool operator>(const Item&);
-    // virtual bool operator==(const Item&);
+    static std::string data_to_key(std::istream& data_ss);
 
   protected:
-    // const static char typecode = 'F';
 };
 
 class DramaMovie : public Movie {
@@ -62,13 +57,9 @@ class DramaMovie : public Movie {
     std::string get_key() const;
 
     static DramaMovie* create_item(std::istream& s);
-    
-    // virtual bool operator<(const Item&);
-    // virtual bool operator>(const Item&);
-    // virtual bool operator==(const Item&);
+    static std::string data_to_key(std::istream& data_ss);
 
   protected:
-    // const static char typecode = 'D';
 };
 
 // the ClassicMovie derived class
@@ -92,14 +83,9 @@ class ClassicMovie : public Movie {
     std::string get_key() const;
 
     static ClassicMovie* create_item(std::istream& s);
-
-    // virtual bool operator<(const Item&);
-    // virtual bool operator>(const Item&);
-    // virtual bool operator==(const Item&);
-  
+    static std::string data_to_key(std::istream& data_ss);
+    
   protected:
-    // const static char typecode = 'C';
-
     std::string major_actor;
     int month;
 };
