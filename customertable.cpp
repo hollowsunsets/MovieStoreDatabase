@@ -99,7 +99,7 @@ void CustomerTable::remove(int id) {
     --elements;
 }
 
-void CustomerTable::record_transaction(int id, const Transaction &transaction) {
+void CustomerTable::record_transaction(int id, Transaction* transaction) {
     Customer c = this->retrieve(id);
     c.record_transaction(transaction);
 }

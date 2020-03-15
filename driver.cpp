@@ -1,12 +1,16 @@
 #include <assert.h>
 #include <iostream>
 #include <sstream>
+#include <fstream>
+
+
 #include "customer.h"
 #include "item.h"
 #include "movie.h"
 #include "itemfactory.h"
 #include "store.h"
-#include <fstream>
+#include "transaction.h"
+#include "transactionfactory.h"
 
 using namespace std;
 
@@ -42,8 +46,8 @@ void test_customer() {
     s2.str("");
 
     cout << "\tTesting Customer record_transaction..." << endl;
-    Transaction t('B', 1001, 'D', 'C', "9 1938 Katherine Hepburn");
-    Transaction t2('R', 1001, 'D', 'C', "9 1938 Katherine Hepburn");
+    Transaction* t = TransactionFactory::create_transaction("B 1001 D C 9 1938 Katherine Hepburn");
+    Transaction* t2 = TransactionFactory::create_transaction("R 1001 D C 9 1938 Katherine Hepburn");
     assert(c.record_transaction(t));
     assert(c.record_transaction((t2)));
     assert(!c1.record_transaction(t));
@@ -231,6 +235,10 @@ void test_itemfactory() {
     cout << "ItemFactory tests pass!" << std::endl;
 }
 
+void test_transaction() {
+
+}
+
 int main() {
     test_customer();
     /* test_store(); Commented out for now since problems seem to originate
@@ -238,4 +246,5 @@ int main() {
     test_customer_table();
     test_movie();
     test_itemfactory();
+    test_transaction();
 }

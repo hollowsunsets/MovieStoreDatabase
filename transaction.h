@@ -12,51 +12,83 @@
 #define TRANSACTION_H
 
 #include <string>
+#include <iostream>
+#include <vector>
 
 // glorified struct
 // represents data needed to carry out a transaction
 // this object can easily be passed to TransactionCommand
 // for execution
 //
-// TODO: may be converted to a properly encapsulated class
-// or back to a struct on implementation
 class Transaction {
-    friend std::ostream& operator<<(std::ostream& out, const Transaction& t) {
-        out << t.transaction_type << " " << t.customer_id << " " << t.item_type << " ";
-        out << t.item_typecode << " " << t.item_data;
+    friend std::ostream& operator<<(std::ostream& out, Transaction* t) {
+        out << t->transaction_type << " " << t->customer_id << " " << t->data;
         return out;
     }
 public:
-    // the unique char identifying the type of transaction
-    // valid values correspond to derived TransactionCommands
-    char transaction_type;
-
-    // id of target customer, if present, or 0
-    unsigned short customer_id;
-
-    // for transactions with item data, the item group code
-    // e.g. DVD, CD, VCR Player, ...
-    // must be in [A..~] (ASCII 65-126)
-    char item_type;
-
-    // for transactions with item data, the item subgroup code
-    // e.g. genre, manufacturer
-    // must be in [A..~] (ASCII 65-126)
-    char item_typecode;
-
-    // remaining unparsed item fields
-    // to be handled by appropriate Item subclass
-    // on construction
-    std::string item_data;
-
-    // Constructor
-    Transaction(char trans_type, unsigned short id, char item_type, char typecode, std::string data) {
-        this->transaction_type = trans_type;
-        this->customer_id = id;
-        this->item_type = item_type;
-        this->item_typecode = typecode;
-        this->item_data = data;
+    Transaction() {};
+    Transaction(char transaction_type, int customer_id, std::string data) {
+        this->transaction_type  = transaction_type;
+        this->customer_id = customer_id;
+        this->data = data;
     }
+    char get_transaction_type() const { return transaction_type;  };
+    int customer_id;
+    char transaction_type;
+    std::string data;
 };
+
+/* Example: B 1234 D C 9 1938 Katherine Hepburn
+ *
+ *
+ */
+class BorrowTransaction : public Transaction {
+public:
+    BorrowTransaction(int character_id,
+                     std::string data) : Transaction('B', character_id, data) {};
+    static BorrowTransaction* create_transaction(const std::string& s);
+protected:
+    int character_id;
+    std::string data;
+};
+
+/* Example: R 1234 D C 9 1938 Katherine Hepburn
+ *
+ *
+ */
+class ReturnTransaction : public Transaction {
+public:
+    ReturnTransaction(int character_id, std::string data) : Transaction('R', character_id, data) {};
+    static ReturnTransaction* create_transaction(const std::string& s);
+
+protected:
+    int character_id;
+    std::string data;
+};
+
+/* Example: H 1234
+ *
+ *
+ */
+class HistoryTransaction : public Transaction {
+public:
+    HistoryTransaction(int character_id) : Transaction('H', character_id, "") {}
+    static HistoryTransaction* create_transaction(const std::string& s);
+protected:
+    int character_id;
+};
+
+/* Example: I, no other fields
+ *
+ *
+ */
+class InventoryTransaction : public Transaction {
+public:
+    InventoryTransaction() : Transaction('I', 0, "") {};
+    static InventoryTransaction* create_transaction();
+};
+
+static std::vector<std::string> &split(const std::string &s, char delim,
+                                       std::vector<std::string>& elems);
 
 #endif // TRANSACTION_H

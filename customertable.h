@@ -17,7 +17,7 @@ public:
     // remove a customer from the table
     void remove(int id);
     // record a customer's Transaction, by customer id
-    void record_transaction(int id, const Transaction& transaction);
+    void record_transaction(int id, Transaction* transaction);
     // retrieve the customer data, by customer id
     Customer& retrieve(int id);
     // display table entries
