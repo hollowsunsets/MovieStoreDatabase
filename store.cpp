@@ -97,11 +97,11 @@ bool Store::read_commands(const std::string& filename) {
             // this may not be correct: don't customers store them?
             delete transaction;
         } else {
-            valid = false;
+            //valid = false;
         }
     }
     infile.close();
-    return valid;
+    return true;
 }
 
 // add a customer to the customer table

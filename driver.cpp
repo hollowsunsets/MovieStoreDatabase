@@ -252,16 +252,16 @@ void test_itemfactory() {
 
     cout << "\tItemFactory rejects bad data on key request:" << endl;
     std::cerr << "\t\t";
-    assert(ItemFactory::item_data_to_key("Y 2 1971 Ruth Gordon") == "");
+    assert(ItemFactory::item_data_to_key("D Y 2 1971 Ruth Gordon") == "");
 
     cout << "\tItemFactory correctly transforms classic data to key:" << endl;
     cout << "\t\t" << ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid") << endl;
-    assert(ItemFactory::item_data_to_key("C 12 1998 Alice Margatroid")
+    assert(ItemFactory::item_data_to_key("D C 12 1998 Alice Margatroid")
            == i->get_key());
 
     cout << "\tItemFactory correctly transforms drama data to key:" << endl;
     cout << "\t\t" << ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,") << endl;
-    assert(ItemFactory::item_data_to_key("D TSA, Embodiment of Scarlet Devil,")
+    assert(ItemFactory::item_data_to_key("D D TSA, Embodiment of Scarlet Devil,")
            == i2->get_key());
     
     delete i;
