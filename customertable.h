@@ -40,7 +40,7 @@ protected:
 
 private:
 
-    const static int INITIAL_SIZE = 2;
+    const static int INITIAL_SIZE = 64;
     unsigned char SHUFFLE[256] = {
             98,  6, 85,150, 36, 23,112,164,135,207,169,  5, 26, 64,165,219,
             61, 20, 68, 89,130, 63, 52,102, 24,229,132,245, 80,216,195,115,
