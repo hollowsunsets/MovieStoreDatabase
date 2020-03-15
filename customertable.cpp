@@ -38,16 +38,11 @@ CustomerTable::~CustomerTable() {
  * Postconditions: New Customer is dynamically allocated.
  */
 void CustomerTable::insert(const Customer& c) {
-    std::cout << "\t\tInserting " << c << std::endl;
-
     int load_factor = (elements + 1) / size;
     if (load_factor > 0.5) {
-        // std::cout << "Load factor: " << load_factor << std::endl;
         // Resize the hash table by replacing it with a new table
         this->elements = 0;
         this->customer_table = get_resized_table();
-        // std::cout << "Table has been resized" << std::endl;
-        // std::cout << "Size fields: " << elements << " " << size << std::endl;
     }
     this->insert_to_table(c, this->customer_table);
 }
@@ -58,11 +53,8 @@ void CustomerTable::insert(const Customer& c) {
  * Postcondition: N/A
  */
 void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
-    std::cout << "\t\t\tInserting " << c << std::endl;
     ++elements;
     int index = hash(c.get_id());
-    std::cout << "\t\t\tInsert index : " << index << std::endl;
-
     // quadratic probing
     int jumps = 0, m = 0;
 
@@ -75,8 +67,6 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
     }
     delete customers[cluster_index];
     customers[cluster_index] = new Customer(c);
-
-    std::cout << "\t\t\tinsertion success at " << cluster_index << std::endl;
 }
 
 
@@ -87,7 +77,6 @@ void CustomerTable::insert_to_table(const Customer &c, Customer** customers) {
  */
 bool CustomerTable::remove(int id) {
     this->retrieve(id);
-    this->display_table();
     int index = hash(id);
     int jumps = 0, m = 0;
     int cluster_index = (index + m) & (size - 1);
@@ -131,11 +120,8 @@ void CustomerTable::record_transaction(int id, Transaction* transaction) {
  */
 Customer& CustomerTable::retrieve(int id) {
     int index = hash(id);
-    std::cout << "\t\tRetrieving " << id << std::endl;
-    std::cout << "\t\tRetrieve index: " << index << std::endl;
     int jumps = 0, m = 0;
     int cluster_index = (index + m) & (size - 1);
-    std::cout << "\t\tInitial retrieve index: " << (index + m) % size << std::endl;
 
     while (cluster_index >= 0 && cluster_index < size &&
            customer_table[cluster_index] != NULL) {
@@ -146,9 +132,7 @@ Customer& CustomerTable::retrieve(int id) {
         m = probe_size(++jumps);
         cluster_index = (index + m) & (size - 1);
     }
-    std::cout << "\t\tExiting cluster index: " << cluster_index << std::endl;
     std::stringstream error_message;
-    error_message << "The given id " << id << " does not exist in the customer table.";
     throw std::invalid_argument(error_message.str());
 }
 
@@ -181,8 +165,6 @@ void CustomerTable::display_table() const {
  * Postconditions: N/A
  */
 int CustomerTable::hash(int id) const {
-    std::cout << "\t\t\t\tCalculating hash for id: " << id << std::endl;
-    std::cout << "\t\t\t\tCurrent size: " << size << std::endl;
     // initialize high and low parts
     // considering using uint_8 here
     int hash_lo = SHUFFLE[id & 0x00FF];
@@ -197,7 +179,6 @@ int CustomerTable::hash(int id) const {
     hash_hi = SHUFFLE[hash_hi ^ (id & 0xFF00) >> 8];
 
     // combine to get 16 bits, then modulo size
-    std::cout << "\t\t\t\tResulting hash: " << (((hash_hi << 8) | hash_lo) & (size - 1)) << std::endl;
     return ((hash_hi << 8) | hash_lo) & (size - 1);
 }
 
@@ -207,15 +188,12 @@ int CustomerTable::hash(int id) const {
  * Postcondition:     Base pointer is deallocated and replaced with new array.
  */
 Customer** CustomerTable::get_resized_table() {
-    std::cout << "CURRENTLY RESIZING HASH TABLE!!!!!!" << std::endl;
     int old_size = size;
     size = size << 1;
-    std::cout << "\tUpdated size: " << size << std::endl;
     Customer** new_customer_table = new Customer*[size];
     for (int i = 0; i < size; i++) {
         new_customer_table[i] = NULL;
     }
-    std::cout << "\tREHASHING old values... " << std::endl;
     for (int i = 0; i < old_size; i++) {
         if (customer_table[i] != NULL) {
             this->insert_to_table(*customer_table[i], new_customer_table);
@@ -223,9 +201,7 @@ Customer** CustomerTable::get_resized_table() {
         delete customer_table[i];
         customer_table[i] = NULL;
     }
-    //clear(customer_table);
     delete[] customer_table;
-    std::cout << "\tDONE REHASHING old values..." << std::endl;
     return new_customer_table;
 }
 
@@ -234,16 +210,6 @@ Customer** CustomerTable::get_resized_table() {
  * Postcondition: CustomerTable is deallocated
  */
 void CustomerTable::clear() {
-    for (int i = 0; i < size; i++) {
-        if (customer_table[i] != NULL) {
-            delete customer_table[i];
-            customer_table[i] = NULL;
-        }
-    }
-    delete[] customer_table;
-}
-
-void CustomerTable::clear(Customer** customer_table) {
     for (int i = 0; i < size; i++) {
         if (customer_table[i] != NULL) {
             delete customer_table[i];

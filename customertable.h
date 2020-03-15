@@ -58,7 +58,6 @@ private:
     Customer** get_resized_table();
 
     void clear();
-    void clear(Customer** customer_table);
     void insert_to_table(const Customer& c, Customer** customers);
     int probe_size(int jumps);
 
