@@ -2,8 +2,7 @@
 
 ## Overview
 
-
-### Hash Function
+In-memory data store that processes transactions for a movie store from the command line.
 
 
 
